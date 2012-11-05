@@ -3,7 +3,13 @@
 `define ph_x 2
 `define ph_m 3
 `define ph_w 4
-`define INST_CONST 32'b0000_0001_11_000_001_00000000_00000000 // zADD r0 r1
+
+`define INST_CONST 32'b00_000_001_11_000_001_00000000_00000000 // zADD r0 r1
+// `define INST_CONST 32'b00_101_001_11_000_001_00000000_00000000 // zSUB r0 r1
+// `define INST_CONST 32'b00_111_001_11_000_001_00000000_00000000 // zCMP r0 r1
+// `define INST_CONST 32'b00_100_001_11_000_001_00000000_00000000 // zAND r0 r1
+// `define INST_CONST 32'b00_001_001_11_000_001_00000000_00000000 // zOR  r0 r1
+// `define INST_CONST 32'b00_110_001_11_000_001_00000000_00000000 // zXOR r0 r1
 
 module top_module(input              CLK,
                   input              N_RST,
@@ -19,14 +25,14 @@ module top_module(input              CLK,
 
     reg    [31:0]                     ir, tr, sr, dr;
     wire   [31:0]                     aluA, aluB, aluOUT;
-    wire   [15:0]                     aluI;
+    wire   [2:0]                     aluI;
 
 
     assign we = phase[`ph_w];
     assign ra1 = ir[21:19];
     assign ra2 = ir[18:16];
     assign wa  = ir[21:19];
-    assign aluI = ir[31:24];
+    assign aluI = ir[29:27];
     assign aluA = tr;
     assign aluB = sr;
     assign wd = dr;

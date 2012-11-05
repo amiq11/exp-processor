@@ -1,5 +1,6 @@
-/home/denjo/mygit/experiment/cpu/cpu/src/top_module.v {1 {vlog -work work -nocovercells /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v
+/home/denjo/mygit/experiment/cpu/cpu/src/top_module.v {2 {vlog -work work -nocovercells /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v
 Model Technology ModelSim ALTERA vlog 6.6d Compiler 2010.11 Nov  2 2010
+** Warning: /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(7): (vlog-2263) Redefinition of macro: INST_CONST.
 -- Compiling module top_module
 
 Top level modules:
@@ -12,19 +13,19 @@ Model Technology ModelSim ALTERA vlog 6.6d Compiler 2010.11 Nov  2 2010
 Top level modules:
 	register_file
 
-} {} {}} /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v {1 {vlog -work work -nocovercells /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v
-Model Technology ModelSim ALTERA vlog 6.6d Compiler 2010.11 Nov  2 2010
--- Compiling module phase_gen
-
-Top level modules:
-	phase_gen
-
 } {} {}} /home/denjo/mygit/experiment/cpu/cpu/src/alu.v {1 {vlog -work work -nocovercells /home/denjo/mygit/experiment/cpu/cpu/src/alu.v
 Model Technology ModelSim ALTERA vlog 6.6d Compiler 2010.11 Nov  2 2010
 -- Compiling module alu
 
 Top level modules:
 	alu
+
+} {} {}} /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v {1 {vlog -work work -nocovercells /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v
+Model Technology ModelSim ALTERA vlog 6.6d Compiler 2010.11 Nov  2 2010
+-- Compiling module phase_gen
+
+Top level modules:
+	phase_gen
 
 } {} {}} /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v {1 {vlog -work work -nocovercells /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v
 Model Technology ModelSim ALTERA vlog 6.6d Compiler 2010.11 Nov  2 2010

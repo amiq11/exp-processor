@@ -1,0 +1,44 @@
+# Loading project cpu
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful.
+# 5 compiles, 0 failed with no errors. 
+# Load canceled
+vsim work.dp_testbench
+# vsim work.dp_testbench 
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(37): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+# WARNING: No extended dataflow license exists
+run -all
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1200 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
+run -all
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful with warnings.
+# 5 compiles, 0 failed with no errors. 
+run
+restart
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(37): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+run
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1200 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
