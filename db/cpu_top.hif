@@ -53,7 +53,7 @@ VERILOG_NON_CONSTANT_LOOP_LIMIT
 
 # end
 # entity
-register_file
+top_module
 # storage
 db|cpu_top.(0).cnf
 db|cpu_top.(0).cnf
@@ -63,8 +63,8 @@ ON
 }
 # case_sensitive
 # source_file
-src|register_file.v
-a8787882af73a76e655a7b28bbfccc98
+src|top_module.v
+79486f972ea6364d915016ce20cbddb2
 8
 # internal_option {
 HDL_INITIAL_FANOUT_LIMIT
@@ -84,6 +84,42 @@ VERILOG_NON_CONSTANT_LOOP_LIMIT
 }
 # hierarchies {
 |
+}
+# macro_sequence
+
+# end
+# entity
+register_file
+# storage
+db|cpu_top.(2).cnf
+db|cpu_top.(2).cnf
+# logic_option {
+AUTO_RAM_RECOGNITION
+ON
+}
+# case_sensitive
+# source_file
+src|register_file.v
+a98c95d7c648a39d4142616ae03afdd7
+8
+# internal_option {
+HDL_INITIAL_FANOUT_LIMIT
+OFF
+AUTO_RESOURCE_SHARING
+OFF
+AUTO_RAM_RECOGNITION
+ON
+AUTO_ROM_RECOGNITION
+ON
+IGNORE_VERILOG_INITIAL_CONSTRUCTS
+OFF
+VERILOG_CONSTANT_LOOP_LIMIT
+5000
+VERILOG_NON_CONSTANT_LOOP_LIMIT
+250
+}
+# hierarchies {
+register_file:register
 }
 # macro_sequence
 
