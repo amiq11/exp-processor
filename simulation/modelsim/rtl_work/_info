@@ -3,31 +3,31 @@ K3
 13
 cModel Technology
 Z0 d/home/denjo/mygit/experiment/cpu/cpu/simulation/modelsim
-vregister_file
-IzYfFo<nM;VhOBaE4Ad;Ah0
-VC2eT^AmM8NbV98]_l=h7R2
+vadder
+IEL=BgPl76:PJX2>EB0G:h2
+V1Ho>WXZP17^g3bTU@2k4D0
 Z1 d/home/denjo/mygit/experiment/cpu/cpu/simulation/modelsim
-w1352040666
-8/home/denjo/mygit/experiment/cpu/cpu/src/register_file.v
-F/home/denjo/mygit/experiment/cpu/cpu/src/register_file.v
+w1352095378
+8/home/denjo/mygit/experiment/cpu/cpu/src/adder.v
+F/home/denjo/mygit/experiment/cpu/cpu/src/adder.v
 L0 1
 Z2 OV;L;6.6d;45
 r1
 31
 Z3 o-vlog01compat -work work -O0
-!s100 od?dAIkNVDL=Eh9d<7WEZ3
+Z4 !s92 -vlog01compat -work work +incdir+/home/denjo/mygit/experiment/cpu/cpu/src -O0
+!s100 O9_>m<LV1S;WJ4EFKJfSc1
 !s85 0
 !s101 -O0
-Z4 !s92 -vlog01compat -work work +incdir+/home/denjo/mygit/experiment/cpu/cpu/src -O0
-vrf_testbench
-!s100 ::cUNbJUc4lYX9=FXWFA52
-Iii2`z[0YK_]4bcXZz5?J;3
-V34F:fCmFcOEYP8zchVA0@2
+vdp_testbench
+!s100 nl0N6V3glf?:1DC9z6<Sz2
+I4BJ_5CkUGb5:Vc>L?4B2h3
+VMk3zU?M__:fm]SIXDN2_00
 R1
-w1352040260
-8/home/denjo/mygit/experiment/cpu/cpu/src/rf_testbench.v
-F/home/denjo/mygit/experiment/cpu/cpu/src/rf_testbench.v
-L0 3
+w1352096811
+8/home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v
+F/home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v
+L0 8
 R2
 r1
 !s85 0
@@ -35,3 +35,51 @@ r1
 !s101 -O0
 R3
 R4
+vphase_gen
+Iab>W0M0VFc5G<e8lggCTz2
+VkiBngzVW7IhHXPkiCcNSA1
+R1
+w1352097305
+8/home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v
+F/home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v
+L0 7
+R2
+r1
+31
+R3
+R4
+!s100 mNCzJ<F=Af;;b74EIPf6f2
+!s85 0
+!s101 -O0
+vregister_file
+Ig]XXkl;5B``5S:OZ`fFFN1
+VA0mP[mk`5]lN:JB_3:L:=3
+R1
+w1352094655
+8/home/denjo/mygit/experiment/cpu/cpu/src/register_file.v
+F/home/denjo/mygit/experiment/cpu/cpu/src/register_file.v
+L0 1
+R2
+r1
+31
+R3
+R4
+!s100 ji55O^0nI=DW:l6fJZU?@2
+!s85 0
+!s101 -O0
+vtop_module
+IMO1HXYz^@e4PiQ@Vz9S0g1
+VlEj=JaR>l;`^OJ_=XlCV50
+R1
+w1352097698
+8/home/denjo/mygit/experiment/cpu/cpu/src/top_module.v
+F/home/denjo/mygit/experiment/cpu/cpu/src/top_module.v
+L0 8
+R2
+r1
+31
+R3
+R4
+!s100 R;D<Rf11j1C_1M=NPd><j0
+!s85 0
+!s101 -O0

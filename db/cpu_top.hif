@@ -53,42 +53,6 @@ VERILOG_NON_CONSTANT_LOOP_LIMIT
 
 # end
 # entity
-top_module
-# storage
-db|cpu_top.(0).cnf
-db|cpu_top.(0).cnf
-# logic_option {
-AUTO_RAM_RECOGNITION
-ON
-}
-# case_sensitive
-# source_file
-src|top_module.v
-79486f972ea6364d915016ce20cbddb2
-8
-# internal_option {
-HDL_INITIAL_FANOUT_LIMIT
-OFF
-AUTO_RESOURCE_SHARING
-OFF
-AUTO_RAM_RECOGNITION
-ON
-AUTO_ROM_RECOGNITION
-ON
-IGNORE_VERILOG_INITIAL_CONSTRUCTS
-OFF
-VERILOG_CONSTANT_LOOP_LIMIT
-5000
-VERILOG_NON_CONSTANT_LOOP_LIMIT
-250
-}
-# hierarchies {
-|
-}
-# macro_sequence
-
-# end
-# entity
 register_file
 # storage
 db|cpu_top.(2).cnf
@@ -100,7 +64,7 @@ ON
 # case_sensitive
 # source_file
 src|register_file.v
-a98c95d7c648a39d4142616ae03afdd7
+eade94d5345a3fef697448f8a27c93fb
 8
 # internal_option {
 HDL_INITIAL_FANOUT_LIMIT
@@ -123,6 +87,118 @@ register_file:register
 }
 # macro_sequence
 
+# end
+# entity
+adder
+# storage
+db|cpu_top.(4).cnf
+db|cpu_top.(4).cnf
+# logic_option {
+AUTO_RAM_RECOGNITION
+ON
+}
+# case_sensitive
+# source_file
+src|adder.v
+d68f79a75a9494349f71b3f349bb48ef
+8
+# internal_option {
+HDL_INITIAL_FANOUT_LIMIT
+OFF
+AUTO_RESOURCE_SHARING
+OFF
+AUTO_RAM_RECOGNITION
+ON
+AUTO_ROM_RECOGNITION
+ON
+IGNORE_VERILOG_INITIAL_CONSTRUCTS
+OFF
+VERILOG_CONSTANT_LOOP_LIMIT
+5000
+VERILOG_NON_CONSTANT_LOOP_LIMIT
+250
+}
+# hierarchies {
+adder:alu
+}
+# macro_sequence
+
+# end
+# entity
+phase_gen
+# storage
+db|cpu_top.(3).cnf
+db|cpu_top.(3).cnf
+# logic_option {
+AUTO_RAM_RECOGNITION
+ON
+}
+# case_sensitive
+# source_file
+src|phase_gen.v
+fa6a5fbd68a2452b37eba702111a242
+8
+# internal_option {
+HDL_INITIAL_FANOUT_LIMIT
+OFF
+AUTO_RESOURCE_SHARING
+OFF
+AUTO_RAM_RECOGNITION
+ON
+AUTO_ROM_RECOGNITION
+ON
+IGNORE_VERILOG_INITIAL_CONSTRUCTS
+OFF
+VERILOG_CONSTANT_LOOP_LIMIT
+5000
+VERILOG_NON_CONSTANT_LOOP_LIMIT
+250
+}
+# hierarchies {
+phase_gen:pg
+}
+# macro_sequence
+ph_w4ph_f0ph_w4ph_f0
+# end
+# entity
+top_module
+# storage
+db|cpu_top.(0).cnf
+db|cpu_top.(0).cnf
+# logic_option {
+AUTO_RAM_RECOGNITION
+ON
+}
+# case_sensitive
+# source_file
+src|top_module.v
+251de1fff8ef117dac26c35968f46d4a
+8
+# internal_option {
+HDL_INITIAL_FANOUT_LIMIT
+OFF
+AUTO_RESOURCE_SHARING
+OFF
+AUTO_RAM_RECOGNITION
+ON
+AUTO_ROM_RECOGNITION
+ON
+IGNORE_VERILOG_INITIAL_CONSTRUCTS
+OFF
+VERILOG_CONSTANT_LOOP_LIMIT
+5000
+VERILOG_NON_CONSTANT_LOOP_LIMIT
+250
+}
+# include_file {
+src|phase_gen.v
+fa6a5fbd68a2452b37eba702111a242
+}
+# hierarchies {
+|
+}
+# macro_sequence
+ph_w4ph_f0ph_w4ph_f0INST_CONST32'b0000_0001_11_000_001_00000000_00000000 ph_r1ph_x2ph_m3ph_w4
 # end
 # complete
 

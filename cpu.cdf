@@ -4,10 +4,10 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(EP1C6Q240) Path("/home/denjo/mygit/experiment/cpu/cpu/") File("cpu_top.sof") MfrSpec(OpMask(1));
+		Device PartName(EPCS1) Path("/home/denjo/mygit/experiment/cpu/cpu/") File("cpu_top.pof") MfrSpec(OpMask(1) Child_OpMask(1 1));
 
 ChainEnd;
 
 AlteraBegin;
-	ChainType(JTAG);
+	ChainType(asc);
 AlteraEnd;

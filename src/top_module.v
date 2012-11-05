@@ -1,3 +1,10 @@
+`define ph_f 0
+`define ph_r 1
+`define ph_x 2
+`define ph_m 3
+`define ph_w 4
+`define INST_CONST 32'b0000_0001_11_000_001_00000000_00000000 // zADD r0 r1
+
 module top_module(input              CLK,
                   input              N_RST,
                   output wire [63:0] SEG_OUT,
@@ -5,8 +12,88 @@ module top_module(input              CLK,
 
     reg [7:0]                         r_controller;
     wire [31:0]                       r_reg [0:7];
-    wire [31:0]                       rd1, rd2;
+    wire [2:0]                        ra1, ra2, wa;
+    wire [31:0]                       rd1, rd2, wd;
+    wire                              hlt, we;
+    wire [`ph_w:`ph_f]                phase;
 
+    reg    [31:0]                     ir, tr, sr, dr;
+    wire   [31:0]                     aluA, aluB, aluOUT;
+
+
+    assign we = phase[`ph_w];
+    assign ra1 = ir[21:19];
+    assign ra2 = ir[18:16];
+    assign wa  = ir[21:19];
+    assign aluA = tr;
+    assign aluB = sr;
+    assign wd = dr;
+
+    /* ------------------------------------------------------ */
+    // phase generator
+    phase_gen pg(0, phase, CLK, N_RST);
+
+    /* ------------------------------------------------------ */
+    // register
+    register_file register( ra1,
+                            ra2,
+                            wa, 
+                            rd1,  
+                            rd2, 
+                            wd,
+                            we,
+                            CLK, 
+                            N_RST,
+                            r_reg[0], r_reg[1], r_reg[2], r_reg[3], r_reg[4], r_reg[5], r_reg[6], r_reg[7]);
+
+
+    /* ------------------------------------------------------ */
+    // alu(adder)
+    adder alu( aluA, aluB, aluOUT );
+
+    
+    /* ------------------------------------------------------ */
+    // control
+    // ホントはphase counterのお仕事？
+    always @( posedge CLK, negedge N_RST ) begin
+        if ( N_RST == 0 ) begin
+            ir <= 0; 
+            tr <= 0;
+            sr <= 0;
+            dr <= 0;
+        end
+        else begin
+            case ( phase )
+              `ph_f: 
+                begin
+                    ir <= `INST_CONST; // とりあえず定数を突っ込む
+                end
+              `ph_r: 
+                begin
+                    tr <= rd1;
+                    sr <= rd2;
+                end
+              `ph_x:
+                begin
+                    dr <= aluOUT;
+                end
+              `ph_m:
+                begin
+                    // memory
+                end
+              `ph_w:
+                begin
+                end
+            endcase // case ( phase )
+        end
+    end
+
+    
+    
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ //
+    // segment controller
+    // ホントはモジュール化したいところ
     assign SEG_OUT = seg_out_select(r_controller);
     assign SEG_SEL = r_controller;
 
@@ -37,18 +124,6 @@ module top_module(input              CLK,
           default        : seg_out_select = 64'd0;
         endcase
     endfunction 
-    /* ------------------------------------------------------ */
-    // register
-    register_file register(3'd0,  // ra1
-                           3'd0,  // ra2
-                           3'd0,  // wa
-                           rd1,  
-                           rd2, 
-                           32'd0, // wd 
-                           1'd0,  // we
-                           CLK, 
-                           N_RST,
-                           r_reg[0], r_reg[1], r_reg[2], r_reg[3], r_reg[4], r_reg[5], r_reg[6], r_reg[7]);
     /* ------------------------------------------------------ */
     // seg_decoder
     function [7:0] seg_decoder_4;

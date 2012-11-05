@@ -15,9 +15,10 @@ module phase_gen(hlt, phase, clk, n_rst);
     end
 
     reg [`ph_w : `ph_f] phase;
-    always @(posedge clk  or  n_rst) begin
-        if (n_rst == 0)                 // 非同期リセット 
+    always @(posedge clk  or negedge n_rst) begin
+        if (n_rst == 0) begin                // 非同期リセット 
             phase <= 0;
+        end
         else if (hlt == 1)              // zHLT 命令による同期リセット
             phase <= 0;
         else if (n_rst_d[2:1] ==  2'b01)    // カウント開始
@@ -25,4 +26,5 @@ module phase_gen(hlt, phase, clk, n_rst);
         else
             phase <= {phase[3:0], phase[4]};
     end
+
 endmodule
