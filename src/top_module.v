@@ -19,12 +19,14 @@ module top_module(input              CLK,
 
     reg    [31:0]                     ir, tr, sr, dr;
     wire   [31:0]                     aluA, aluB, aluOUT;
+    wire   [15:0]                     aluI;
 
 
     assign we = phase[`ph_w];
     assign ra1 = ir[21:19];
     assign ra2 = ir[18:16];
     assign wa  = ir[21:19];
+    assign aluI = ir[31:24];
     assign aluA = tr;
     assign aluB = sr;
     assign wd = dr;
@@ -49,7 +51,7 @@ module top_module(input              CLK,
 
     /* ------------------------------------------------------ */
     // alu(adder)
-    adder alu( aluA, aluB, aluOUT );
+    alu alu( aluI, aluA, aluB, aluOUT );
 
     
     /* ------------------------------------------------------ */

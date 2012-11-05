@@ -1,0 +1,85 @@
+m255
+K3
+13
+cModel Technology
+Z0 d/home/denjo/mygit/experiment/cpu/hellomodelsim
+valu
+Z1 !s100 PDJHFHSAlFZ>>^NF5bLdE2
+Z2 If5L]CSK4_Fo^e8aFM4X0M1
+Z3 V;De6fA>26]AVn07zj]OMM2
+Z4 d/home/denjo/mygit/experiment/cpu/cpu
+Z5 w1352099116
+Z6 8/home/denjo/mygit/experiment/cpu/cpu/src/alu.v
+Z7 F/home/denjo/mygit/experiment/cpu/cpu/src/alu.v
+L0 7
+Z8 OV;L;6.6d;45
+r1
+31
+Z9 !s102 -nocovercells
+Z10 o-work work -nocovercells -O0
+!s85 0
+!s101 -O0
+vdp_testbench
+Z11 !s100 h27WOYH1iTb??2fJnDInM0
+Z12 IE:MUQdandae:B5m5QHjCO3
+Z13 VMk3zU?M__:fm]SIXDN2_00
+R4
+Z14 w1352097879
+Z15 8/home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v
+Z16 F/home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v
+L0 8
+R8
+r1
+31
+R9
+R10
+!s85 0
+!s101 -O0
+vphase_gen
+Z17 !s100 mNCzJ<F=Af;;b74EIPf6f2
+Z18 IJa2KfU[m0<nD[^=7mibZ]3
+Z19 VkiBngzVW7IhHXPkiCcNSA1
+R4
+Z20 w1352097305
+Z21 8/home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v
+Z22 F/home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v
+L0 7
+R8
+r1
+31
+R9
+R10
+!s85 0
+!s101 -O0
+vregister_file
+Z23 !s100 ji55O^0nI=DW:l6fJZU?@2
+Z24 IkidS9jDM<:>OjnUf8KheC1
+Z25 VA0mP[mk`5]lN:JB_3:L:=3
+R4
+Z26 w1352094655
+Z27 8/home/denjo/mygit/experiment/cpu/cpu/src/register_file.v
+Z28 F/home/denjo/mygit/experiment/cpu/cpu/src/register_file.v
+L0 1
+R8
+r1
+31
+R9
+R10
+!s85 0
+!s101 -O0
+vtop_module
+Z29 !s100 f<IzTMYj[iX1=FzWOiNK=1
+Z30 I4A`7TziA]^cX5`Z5=2H>40
+Z31 VlEj=JaR>l;`^OJ_=XlCV50
+R4
+Z32 w1352098914
+Z33 8/home/denjo/mygit/experiment/cpu/cpu/src/top_module.v
+Z34 F/home/denjo/mygit/experiment/cpu/cpu/src/top_module.v
+L0 8
+R8
+r1
+!s85 0
+31
+!s101 -O0
+R9
+R10
