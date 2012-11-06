@@ -1,8 +1,8 @@
-`define ph_f 0
-`define ph_r 1
-`define ph_x 2
-`define ph_m 3
-`define ph_w 4
+`define ph_f 5'b00001
+`define ph_r 5'b00010
+`define ph_x 5'b00100
+`define ph_m 5'b01000
+`define ph_w 5'b10000
 
 // `define INST_CONST 32'b00_000_001_11_000_001_00000000_00000000 // zADD r0 r1
 // `define INST_CONST 32'b00_101_001_11_000_001_00000000_00000000 // zSUB r0 r1
@@ -10,32 +10,67 @@
 // `define INST_CONST 32'b00_100_001_11_000_001_00000000_00000000 // zAND r0 r1
 // `define INST_CONST 32'b00_001_001_11_000_001_00000000_00000000 // zOR  r0 r1
 // `define INST_CONST 32'b00_110_001_11_000_001_00000000_00000000 // zXOR r0 r1
+// `define INST_CONST 32'b00_000_001_11_000_001_00000000_00000000 // zADD r0 r1
+
+`define INST_CONST1 32'b1000_1011_01_000_001_00000000_00000000  // zLD  r0 r1 0
+`define INST_CONST2 32'b00_000_001_11_000_111_00000000_00000000 // zADD r0 r7
+`define INST_CONST3 32'b00_000_001_11_010_111_00000000_00000000 // zADD r2 r7
+`define INST_CONST4 32'b1000_1001_01_000_001_00000000_00000000  // zST  r0 r1 0
+
+`define memsize 9               // MEMBITS+1 bit 
+
+`define zLDSTh 6'b100010
+`define zLDSTl 2'b01
+
 
 module top_module(input              CLK,
                   input              N_RST,
                   output wire [63:0] SEG_OUT,
                   output wire [7:0]  SEG_SEL);
 
-    reg [7:0]                         r_controller;
-    wire [31:0]                       r_reg [0:7];
-    wire [2:0]                        ra1, ra2, wa;
-    wire [31:0]                       rd1, rd2, wd;
+    reg [7:0]                         r_controller; // 7seg disp
+    wire [31:0]                       r_reg [0:7];  // 7seg disp
+    
+    wire [2:0]                        ra1, ra2, wa; // register file address
+    wire [31:0]                       rd1, rd2, wd; // register file data
     wire                              hlt, we;
-    wire [`ph_w:`ph_f]                phase;
+    wire [4:0]                phase;
 
-    reg    [31:0]                     ir, tr, sr, dr;
-    wire   [31:0]                     aluA, aluB, aluOUT;
-    wire   [2:0]                     aluI;
+    reg    [31:0]                     ir, tr, sr, dr; // core register
+    
+    wire   [31:0]                     aluA, aluB, aluOUT; // alu in/out
+    wire   [2:0]                      aluI;         // alu instruction
+    wire   [31:0]                     wmemd, rmemd; // memory data
+    wire    [`memsize:0]               wmema, rmema; // memory address
+    reg                               wmemen;       // memory write enable
 
+    wire   [5:0]                      i_1_6;          // 1byte top 6bits
+    wire   [1:0]                      i_2_2;          // 2byte top 2bits
+    wire                              s,w;            // sign, opsize
+    wire   [7:0]                      sim8;
 
-    assign we = phase[`ph_w];
+    reg    [1:0]                      teststate; // for simulation
+
+    assign we = phase[4];       // phase writebackのときに書き戻し
     assign ra1 = ir[21:19];
     assign ra2 = ir[18:16];
     assign wa  = ir[21:19];
+    
     assign aluI = ir[29:27];
     assign aluA = tr;
     assign aluB = sr;
+    
     assign wd = dr;
+
+    assign i_1_6 = ir[31:26];
+    assign i_2_2 = ir[23:22];
+    assign s = ir[25];
+    assign w = ir[24];
+    assign sim8 = ir[15:8];
+
+    assign wmema = sr[9:0]+sim8;
+    assign rmema = sr[9:0]+sim8;
+    assign wmemd = tr;
 
     /* ------------------------------------------------------ */
     // phase generator
@@ -59,6 +94,11 @@ module top_module(input              CLK,
     // alu(adder)
     alu alu( aluI, aluA, aluB, aluOUT );
 
+    /* ------------------------------------------------------ */
+    // mem
+    // 主記憶
+    mem memory( CLK, wmemd, rmema, wmema, wmemen, rmemd );
+    
     
     /* ------------------------------------------------------ */
     // control
@@ -69,12 +109,23 @@ module top_module(input              CLK,
             tr <= 0;
             sr <= 0;
             dr <= 0;
+            wmemen <= 0;
+            teststate <= 0;     // for simulation
         end
         else begin
-            case ( phase )
+            case ( phase ) 
               `ph_f: 
                 begin
-                    ir <= `INST_CONST; // とりあえず定数を突っ込む
+                    // 適当
+                    case ( teststate )
+                      0: ir <= `INST_CONST1;
+                      1: ir <= `INST_CONST2;
+                      2: ir <= `INST_CONST3;
+                      3: ir <= `INST_CONST4;
+                    endcase // case ( teststate )
+                    teststate <= teststate + 1;
+                    // if ( teststate == 2 ) teststate <= 0;
+                    // else teststate <= teststate + 1;
                 end
               `ph_r: 
                 begin
@@ -83,14 +134,30 @@ module top_module(input              CLK,
                 end
               `ph_x:
                 begin
-                    dr <= aluOUT;
+                    // LDはここで待ち
+                    // STはここでweを1
+                    if ( i_1_6 == `zLDSTh && i_2_2 ==  `zLDSTl && s == 0 ) begin
+                        wmemen <= 1;
+                    end
+                    if ( ir[31:30] == 2'b00 ) begin // alu
+                        dr <= aluOUT;
+                    end else begin
+                        dr <= tr; // とりあえず適当
+                    end
                 end
               `ph_m:
                 begin
                     // memory
+                    if ( i_1_6 == `zLDSTh && i_2_2 ==  `zLDSTl && s == 1 ) begin
+                        dr <= rmemd;
+                    end
+                    if ( i_1_6 == `zLDSTh && i_2_2 ==  `zLDSTl && s == 0 ) begin
+                        wmemen <= 0;
+                    end
                 end
               `ph_w:
                 begin
+                    // 勝手に書き込む
                 end
             endcase // case ( phase )
         end

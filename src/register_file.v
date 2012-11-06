@@ -12,14 +12,9 @@ module register_file ( ra1, ra2, wa, rd1, rd2, wd, we, clk, n_rst,
 
     always @( posedge clk or negedge n_rst ) begin
         if ( !n_rst ) begin
-        rf[0] <= 32'hAAAA55AA; 
-        rf[1] <= 32'hAA55AAAA; 
-        rf[2] <= 2; 
-        rf[3] <= 3; 
-        rf[4] <= 4; 
-        rf[5] <= 5; 
-        rf[6] <= 6;          
-        rf[7] <= 7; 
+            for ( i=0; i<8; i=i+1 ) begin
+                rf[i] <= 1;
+            end
         end
         else if ( we ) begin
             rf[wa] <= wd;

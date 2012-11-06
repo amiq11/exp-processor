@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <LOG_ROOT>
 	<PROJECT NAME="cpu_top">
+		<CBX_INST_ENTRY INSTANCE_NAME="|top_module|mem:memory|altsyncram:altsyncram_component" CBX_FILE_NAME="altsyncram_7il1.tdf"/>
 	</PROJECT>
 </LOG_ROOT>

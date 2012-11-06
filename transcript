@@ -12,11 +12,368 @@ vsim work.dp_testbench
 # Loading work.phase_gen
 # Loading work.register_file
 # Loading work.alu
-# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(42): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+# ** Error: (vsim-3033) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(99): Instantiation of 'mem' failed. The design unit was not found.
+#         Region: /dp_testbench/top
+#         Searched libraries:
+#             /home/denjo/mygit/experiment/cpu/cpu/work
+# Error loading design
+vsim work.dp_testbench
+# vsim work.dp_testbench 
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# ** Error: (vsim-3033) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(99): Instantiation of 'mem' failed. The design unit was not found.
+#         Region: /dp_testbench/top
+#         Searched libraries:
+#             /home/denjo/mygit/experiment/cpu/cpu/work
+# Error loading design
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful.
+# Compile of altera_mf.v was successful.
+# Compile of mem.v was successful.
+# 7 compiles, 0 failed with no errors. 
+vsim work.dp_testbench
+# vsim work.dp_testbench 
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# Loading work.mem
+# Loading work.altsyncram
+# Loading work.ALTERA_DEVICE_FAMILIES
+# Loading work.ALTERA_MF_MEMORY_INITIALIZATION
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(76): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
 #         Region: /dp_testbench/top/pg
 # WARNING: No extended dataflow license exists
 run
+# Warning: read_during_write_mode_mixed_ports is assumed as   OLD_DATA
+# Time: 0  Instance: dp_testbench.top.memory.altsyncram_component
 # ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
-#    Time: 240 ns  Iteration: 0  Instance: /dp_testbench
+#    Time: 1040 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
+run
+restart
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(76): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+run
+# Warning: read_during_write_mode_mixed_ports is assumed as   OLD_DATA
+# Time: 0  Instance: dp_testbench.top.memory.altsyncram_component
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1040 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
+vsim work.dp_testbench
+# vsim work.dp_testbench 
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# Loading work.mem
+# Loading work.altsyncram
+# Loading work.ALTERA_DEVICE_FAMILIES
+# Loading work.ALTERA_MF_MEMORY_INITIALIZATION
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(76): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful.
+# Compile of altera_mf.v was successful.
+# Compile of mem.v was successful.
+# 7 compiles, 0 failed with no errors. 
+run
+# Warning: read_during_write_mode_mixed_ports is assumed as   OLD_DATA
+# Time: 0  Instance: dp_testbench.top.memory.altsyncram_component
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1040 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful.
+# Compile of altera_mf.v was successful.
+# Compile of mem.v was successful.
+# 7 compiles, 0 failed with no errors. 
+vsim work.dp_testbench
+# vsim work.dp_testbench 
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# Loading work.mem
+# Loading work.altsyncram
+# Loading work.ALTERA_DEVICE_FAMILIES
+# Loading work.ALTERA_MF_MEMORY_INITIALIZATION
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(76): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(76): [PCDPC] - Port size (5 or 5) does not match connection size (16) for port 'phase'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+run
+# Warning: read_during_write_mode_mixed_ports is assumed as   OLD_DATA
+# Time: 0  Instance: dp_testbench.top.memory.altsyncram_component
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1040 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
+vsim work.dp_testbench
+# vsim work.dp_testbench 
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# Loading work.mem
+# Loading work.altsyncram
+# Loading work.ALTERA_DEVICE_FAMILIES
+# Loading work.ALTERA_MF_MEMORY_INITIALIZATION
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(76): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(76): [PCDPC] - Port size (5 or 5) does not match connection size (16) for port 'phase'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+run
+# Warning: read_during_write_mode_mixed_ports is assumed as   OLD_DATA
+# Time: 0  Instance: dp_testbench.top.memory.altsyncram_component
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1040 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful with warnings.
+# Compile of altera_mf.v was successful.
+# Compile of mem.v was successful.
+# 7 compiles, 0 failed with no errors. 
+run
+# Load canceled
+vsim work.dp_testbench
+# vsim work.dp_testbench 
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# Loading work.mem
+# Loading work.altsyncram
+# Loading work.ALTERA_DEVICE_FAMILIES
+# Loading work.ALTERA_MF_MEMORY_INITIALIZATION
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(76): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful with warnings.
+# Compile of altera_mf.v was successful.
+# Compile of mem.v was successful.
+# 7 compiles, 0 failed with no errors. 
+run
+# Warning: read_during_write_mode_mixed_ports is assumed as   OLD_DATA
+# Time: 0  Instance: dp_testbench.top.memory.altsyncram_component
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1040 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
+restart
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# Loading work.mem
+# Loading work.altsyncram
+# Loading work.ALTERA_DEVICE_FAMILIES
+# Loading work.ALTERA_MF_MEMORY_INITIALIZATION
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(76): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+run
+# Warning: read_during_write_mode_mixed_ports is assumed as   OLD_DATA
+# Time: 0  Instance: dp_testbench.top.memory.altsyncram_component
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1040 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
+# Load canceled
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful with warnings.
+# Compile of altera_mf.v was successful.
+# Compile of mem.v was successful.
+# 7 compiles, 0 failed with no errors. 
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful with warnings.
+# Compile of altera_mf.v was successful.
+# Compile of mem.v was successful.
+# 7 compiles, 0 failed with no errors. 
+restart
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# Loading work.mem
+# Loading work.altsyncram
+# Loading work.ALTERA_DEVICE_FAMILIES
+# Loading work.ALTERA_MF_MEMORY_INITIALIZATION
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(76): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+run
+# Warning: read_during_write_mode_mixed_ports is assumed as   OLD_DATA
+# Time: 0  Instance: dp_testbench.top.memory.altsyncram_component
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1040 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful.
+# Compile of altera_mf.v was successful.
+# Compile of mem.v was successful.
+# 7 compiles, 0 failed with no errors. 
+restart
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# Loading work.mem
+# Loading work.altsyncram
+# Loading work.ALTERA_DEVICE_FAMILIES
+# Loading work.ALTERA_MF_MEMORY_INITIALIZATION
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(76): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+run
+# Warning: read_during_write_mode_mixed_ports is assumed as   OLD_DATA
+# Time: 0  Instance: dp_testbench.top.memory.altsyncram_component
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1040 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful.
+# Compile of altera_mf.v was successful.
+# Compile of mem.v was successful.
+# 7 compiles, 0 failed with no errors. 
+restart
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# Loading work.mem
+# Loading work.altsyncram
+# Loading work.ALTERA_DEVICE_FAMILIES
+# Loading work.ALTERA_MF_MEMORY_INITIALIZATION
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(77): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+run
+# Warning: read_during_write_mode_mixed_ports is assumed as   OLD_DATA
+# Time: 0  Instance: dp_testbench.top.memory.altsyncram_component
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1040 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful.
+# Compile of altera_mf.v was successful.
+# Compile of mem.v was successful.
+# 7 compiles, 0 failed with no errors. 
+restart
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# Loading work.mem
+# Loading work.altsyncram
+# Loading work.ALTERA_DEVICE_FAMILIES
+# Loading work.ALTERA_MF_MEMORY_INITIALIZATION
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(77): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+run
+# Warning: read_during_write_mode_mixed_ports is assumed as   OLD_DATA
+# Time: 0  Instance: dp_testbench.top.memory.altsyncram_component
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1040 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful.
+# Compile of altera_mf.v was successful.
+# Compile of mem.v was successful.
+# 7 compiles, 0 failed with no errors. 
+restart
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# Loading work.mem
+# Loading work.altsyncram
+# Loading work.ALTERA_DEVICE_FAMILIES
+# Loading work.ALTERA_MF_MEMORY_INITIALIZATION
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(77): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+run
+# Warning: read_during_write_mode_mixed_ports is assumed as   OLD_DATA
+# Time: 0  Instance: dp_testbench.top.memory.altsyncram_component
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1040 ns  Iteration: 0  Instance: /dp_testbench
+# 1
+# Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23
+# Compile of alu.v was successful.
+# Compile of dp_testbench.v was successful.
+# Compile of phase_gen.v was successful.
+# Compile of register_file.v was successful.
+# Compile of top_module.v was successful.
+# Compile of altera_mf.v was successful.
+# Compile of mem.v was successful.
+# 7 compiles, 0 failed with no errors. 
+restart
+# Loading work.dp_testbench
+# Loading work.top_module
+# Loading work.phase_gen
+# Loading work.register_file
+# Loading work.alu
+# Loading work.mem
+# Loading work.altsyncram
+# Loading work.ALTERA_DEVICE_FAMILIES
+# Loading work.ALTERA_MF_MEMORY_INITIALIZATION
+# ** Warning: (vsim-3015) /home/denjo/mygit/experiment/cpu/cpu/src/top_module.v(77): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'hlt'. The port definition is at: /home/denjo/mygit/experiment/cpu/cpu/src/phase_gen.v(7).
+#         Region: /dp_testbench/top/pg
+run
+# Warning: read_during_write_mode_mixed_ports is assumed as   OLD_DATA
+# Time: 0  Instance: dp_testbench.top.memory.altsyncram_component
+# ** Note: $finish    : /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v(23)
+#    Time: 1040 ns  Iteration: 0  Instance: /dp_testbench
 # 1
 # Break in Module dp_testbench at /home/denjo/mygit/experiment/cpu/cpu/src/dp_testbench.v line 23

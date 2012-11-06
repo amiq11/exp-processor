@@ -1,5 +1,5 @@
-work/
-db/
-simulation/
 *.summary
 *.rpt
+work/
+db/*
+simulation/
