@@ -1,5 +1,6 @@
 `define ADD 3'b000
 `define SUB 3'b101
+`define CMP 3'b111
 `define AND 3'b100
 `define OR  3'b001
 `define XOR 3'b110
@@ -16,7 +17,8 @@ module alu ( inst, da, db, out );
         input  [31:0] a, b;
         case ( i )
           `ADD: calc = a + b;
-          `SUB: calc = a - b;
+          `SUB: calc = b - a;
+          `CMP: calc = b - a;
           `AND: calc = a & b;
           `OR : calc = a | b;
           `XOR: calc = a ^ b;

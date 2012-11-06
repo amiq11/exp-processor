@@ -10,17 +10,17 @@ module dp_testbench;
     wire [63:0] seg_out;
     wire [7:0]  seg_sel;
     
-	always begin	
-		#5 clk = ~clk;
-	end
+    always begin    
+        #5 clk = ~clk;
+    end
 
     top_module top( clk, n_rst, seg_out, seg_sel );
 
     initial begin
         clk = 0; n_rst = 1;
-        #100 n_rst = 0;
-        #100 n_rst = 1;
-        #1000 $finish;
+        #20 n_rst = 0;
+        #20 n_rst = 1;
+        #200 $finish;
     end
     
  
