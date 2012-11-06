@@ -1,0 +1,5 @@
+work/
+db/
+simulation/
+*.summary
+*.rpt
