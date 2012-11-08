@@ -1,5 +1,8 @@
 *.summary
 *.rpt
 work/
-db/*
+db/
 simulation/
+incremental_db/
+transcript
+greybox_tmp/

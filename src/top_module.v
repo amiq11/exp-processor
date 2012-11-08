@@ -1,8 +1,8 @@
-`define ph_f 5'b00001
-`define ph_r 5'b00010
-`define ph_x 5'b00100
-`define ph_m 5'b01000
-`define ph_w 5'b10000
+`define ph_f 0
+`define ph_r 1
+`define ph_x 2
+`define ph_m 3
+`define ph_w 4
 
 // `define INST_CONST 32'b00_000_001_11_000_001_00000000_00000000 // zADD r0 r1
 // `define INST_CONST 32'b00_101_001_11_000_001_00000000_00000000 // zSUB r0 r1
@@ -68,9 +68,9 @@ module top_module(input              CLK,
     assign w = ir[24];
     assign sim8 = ir[15:8];
 
-    assign wmema = sr[9:0]+sim8;
-    assign rmema = sr[9:0]+sim8;
-    assign wmemd = tr;
+    assign wmema = tr[9:0]+sim8;
+    assign rmema = tr[9:0]+sim8;
+    assign wmemd = sr;
 
     /* ------------------------------------------------------ */
     // phase generator
@@ -113,55 +113,48 @@ module top_module(input              CLK,
             teststate <= 0;     // for simulation
         end
         else begin
-            case ( phase ) 
-              `ph_f: 
-                begin
-                    // 適当
-                    case ( teststate )
-                      0: ir <= `INST_CONST1;
-                      1: ir <= `INST_CONST2;
-                      2: ir <= `INST_CONST3;
-                      3: ir <= `INST_CONST4;
-                    endcase // case ( teststate )
-                    teststate <= teststate + 1;
-                    // if ( teststate == 2 ) teststate <= 0;
-                    // else teststate <= teststate + 1;
+            if ( phase[`ph_f] ) begin
+                // 適当
+                case ( teststate )
+                  0: ir <= `INST_CONST1;
+                  1: ir <= `INST_CONST2;
+                  2: ir <= `INST_CONST3;
+                  3: ir <= `INST_CONST4;
+                endcase // case ( teststate )
+                teststate <= teststate + 1;
+                // if ( teststate == 2 ) teststate <= 0;
+                // else teststate <= teststate + 1;
+            end
+            if ( phase[`ph_r] ) begin
+                sr <= rd1;
+                tr <= rd2;
+            end
+            if ( phase[`ph_x] ) begin
+                // LDはここで待ち
+                // STはここでweを1
+                if ( i_1_6 == `zLDSTh && i_2_2 ==  `zLDSTl && s == 0 ) begin
+                    wmemen <= 1;
                 end
-              `ph_r: 
-                begin
-                    tr <= rd1;
-                    sr <= rd2;
+                if ( ir[31:30] == 2'b00 ) begin // alu
+                    dr <= aluOUT;
+                end else begin
+                    dr <= sr; // とりあえず適当
                 end
-              `ph_x:
-                begin
-                    // LDはここで待ち
-                    // STはここでweを1
-                    if ( i_1_6 == `zLDSTh && i_2_2 ==  `zLDSTl && s == 0 ) begin
-                        wmemen <= 1;
-                    end
-                    if ( ir[31:30] == 2'b00 ) begin // alu
-                        dr <= aluOUT;
-                    end else begin
-                        dr <= tr; // とりあえず適当
-                    end
+            end
+            if ( phase[`ph_x] ) begin
+                // memory
+                if ( i_1_6 == `zLDSTh && i_2_2 ==  `zLDSTl && s == 1 ) begin
+                    dr <= rmemd;
                 end
-              `ph_m:
-                begin
-                    // memory
-                    if ( i_1_6 == `zLDSTh && i_2_2 ==  `zLDSTl && s == 1 ) begin
-                        dr <= rmemd;
-                    end
-                    if ( i_1_6 == `zLDSTh && i_2_2 ==  `zLDSTl && s == 0 ) begin
-                        wmemen <= 0;
-                    end
+                if ( i_1_6 == `zLDSTh && i_2_2 ==  `zLDSTl && s == 0 ) begin
+                    wmemen <= 0;
                 end
-              `ph_w:
-                begin
-                    // 勝手に書き込む
-                end
-            endcase // case ( phase )
-        end
-    end
+            end
+            if ( phase[`ph_w] ) begin
+                // 勝手に書き込む
+            end
+        end // else: !if( N_RST == 0 )
+    end // always @ ( posedge CLK, negedge N_RST )
 
     
     

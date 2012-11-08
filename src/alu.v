@@ -17,8 +17,8 @@ module alu ( inst, da, db, out );
         input  [31:0] a, b;
         case ( i )
           `ADD: calc = a + b;
-          `SUB: calc = b - a;
-          `CMP: calc = b - a;
+          `SUB: calc = a - b;
+          `CMP: calc = a - b;
           `AND: calc = a & b;
           `OR : calc = a | b;
           `XOR: calc = a ^ b;
