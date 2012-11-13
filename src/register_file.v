@@ -22,7 +22,7 @@ module register_file ( ra1, ra2, wa, rd1, rd2, wd, we, wespd, wespen, resp, clk,
     always @( posedge clk or negedge n_rst ) begin
         if ( !n_rst ) begin
             for ( i=0; i<8; i=i+1 ) begin
-                rf[i] <= 1;
+                rf[i] <= 0;
             end
         end
         else begin

@@ -69,12 +69,12 @@ module alu ( inst, tr, sr, out, st_refresh, sf, zf, cf, vf, pf );
           // `zJALR: まだ
           `zJR  :  calc = t;
           // s,w,rg1,rg2
-          `zADDI:  calc = (i[25]) ? {1'b0,t} + {1'b0,{16{i[15]}},i[15:0]} : {1'b0,t} + {1'b0,{16'b0},i[15:0]};
-          `zSUBI:  calc = (i[25]) ? {1'b1,t} - {1'b0,{16{i[15]}},i[15:0]} : {1'b1,t} - {1'b0,16'b0,i[15:0]};
-          `zCMPI:  calc = (i[25]) ? {1'b1,t} - {1'b0,{16{i[15]}},i[15:0]} : {1'b1,t} - {1'b0,16'b0,i[15:0]};
-          `zANDI:  calc = t & {{16{i[15]}},i[15:0]};
-          `zORI :  calc = t | {{16{i[15]}},i[15:0]};
-          `zXORI:  calc = t ^ {{16{i[15]}},i[15:0]};
+          `zADDI:  calc = (i[25]) ? {1'b0,t} + {1'b0,{24{i[15]}},i[15:8]} : {1'b0,t} + {1'b0,24'b0,i[15:8]};
+          `zSUBI:  calc = (i[25]) ? {1'b1,t} - {1'b0,{24{i[15]}},i[15:8]} : {1'b1,t} - {1'b0,24'b0,i[15:8]};
+          `zCMPI:  calc = (i[25]) ? {1'b1,t} - {1'b0,{24{i[15]}},i[15:8]} : {1'b1,t} - {1'b0,24'b0,i[15:8]};
+          `zANDI:  calc = t & {{24{i[15]}},i[15:8]};
+          `zORI :  calc = t | {{24{i[15]}},i[15:8]};
+          `zXORI:  calc = t ^ {{24{i[15]}},i[15:8]};
           // w,rg1,rg2
           `zADD:   calc = {1'b0,t} + {1'b0,s};
           `zSUB:   calc = {1'b1,t} - {1'b0,s};
