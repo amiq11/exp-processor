@@ -93,9 +93,8 @@ module top_module(input              CLK,
     reg                               sf, zf, cf, vf, pf; // flags
     
     // alu
-    wire   [31:0]                     alutr, alusr; // alu in
-    wire   [32:0]                     aluOUT;       // alu out
-    wire   [2:0]                      aluI;         // alu instruction
+    wire   [31:0]                     alui, alutr, alusr; // alu in
+    wire   [32:0]                     aluout;       // alu out
     wire   alustf, alusf, aluzf, alucf, aluvf, alupf; // alu flag 
 
     // memory
@@ -127,9 +126,9 @@ module top_module(input              CLK,
     assign wespen = rfctl_wespen( ir4, phase[`ph_w] ); // esp write enable
 
     // alu
-    assign aluI  = ir2;
-    assign aluTR = tr;
-    assign aluSR = sr1;
+    assign alui  = ir2;
+    assign alutr = tr;
+    assign alusr = sr1;
 
     // program counter
     assign ct_taken = (ir4[31:16] == `zBcc || ir4[31:16] == `zB ) ? 1'b1 : 1'b0;
@@ -163,7 +162,7 @@ module top_module(input              CLK,
 
     /* ------------------------------------------------------ */
     // alu
-    alu alu( aluI, aluTR, aluSR, aluOUT, alustf, alusf, aluzf, alucf, aluvf, alupf );
+    alu alu( alui, alutr, alusr, aluout, alustf, alusf, aluzf, alucf, aluvf, alupf );
 
     /* ------------------------------------------------------ */
     // memory
@@ -207,7 +206,7 @@ module top_module(input              CLK,
             if ( phase[`ph_x] ) begin
                 // irの更新
                 ir3 <= ir2;
-                dr1 <= ( (ir2[31:16] == `zB) || (ir2[31:16] == `zBcc) ) ? pc + ir2[15:8] : aluOUT[31:0];
+                dr1 <= ( (ir2[31:16] == `zB) || (ir2[31:16] == `zBcc) ) ? pc + ir2[15:8] : aluout[31:0];
                 
                 // status registerの更新
                 if ( alustf ) begin
