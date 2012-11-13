@@ -82,8 +82,8 @@ module alu ( inst, tr, sr, out, st_refresh, sf, zf, cf, vf, pf );
           `zAND:   calc = t & s;
           `zOR :   calc = t | s;
           `zXOR:   calc = t ^ s;
-          `zLD :   calc = t + {{16{i[15]}},i[15:8]};
-          `zST :   calc = t + {{16{i[15]}},i[15:8]};
+          `zLD :   calc = t + {{24{i[15]}},i[15:8]};
+          `zST :   calc = t + {{24{i[15]}},i[15:8]};
           `zMOV:   calc = s;
           default: calc = 33'b0;
         endcase // case ( i[31:16] )
