@@ -253,15 +253,15 @@ module top_module(input              CLK,
         end
         else begin
             if ( phase[`ph_f] ) begin
-                // ir1 <= mem_rd1;  // MD -> IR1
+                ir1 <= mem_rd1;  // MD -> IR1
                 // ra1, ra2の更新はir1を使ってfunctionで行われる
-                case ( teststate )
-                  0: ir1 <= `INST_0;
-                  1: ir1 <= `INST_1;
-                  2: ir1 <= `INST_2;
-                  3: ir1 <= `INST_3;
-                endcase
-                teststate <= teststate + 1;
+                // case ( teststate )
+                //   0: ir1 <= `INST_0;
+                //   1: ir1 <= `INST_1;
+                //   2: ir1 <= `INST_2;
+                //   3: ir1 <= `INST_3;
+                // endcase
+                // teststate <= teststate + 1;
                 pc2 <= pc1;
             end
             if ( phase[`ph_r] ) begin
