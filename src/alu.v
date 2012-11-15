@@ -65,7 +65,7 @@ module alu ( inst, tr, sr, out, st_refresh, sf, zf, cf, vf, pf );
           `zNOT :  calc = ~t;
           `zSLL :  calc = t <<  i[12:8]; // 5bitにマスク
           `zSRL :  calc = t >>  i[12:8]; // 同上
-          `zSRA :  calc = t >>> i[12:8]; // 同上
+          `zSRA :  calc = {{32{t[31]}},t} >>> i[12:8]; // 同上
           // `zJALR: まだ
           `zJR  :  calc = t;
           // s,w,rg1,rg2
