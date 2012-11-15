@@ -85,6 +85,8 @@ module alu ( inst, tr, sr, out, st_refresh, sf, zf, cf, vf, pf );
           `zLD :   calc = t + {{24{i[15]}},i[15:8]};
           `zST :   calc = t + {{24{i[15]}},i[15:8]};
           `zMOV:   calc = s;
+          `zB  :   calc = t + {{24{i[15]}},i[15:8]};
+          `zBcc:   calc = t + {{24{i[15]}},i[15:8]};
           default: calc = 33'b0;
         endcase // case ( i[31:16] )
     endfunction // case
@@ -122,10 +124,10 @@ module alu ( inst, tr, sr, out, st_refresh, sf, zf, cf, vf, pf );
         begin
             casex ( i[31:16] )
               // w,rg2
-              `zNEG :  cfctl = (src==32'b0) ? 0 : 1;
-              `zSLL :  cfctl = (inst[12:8]==0) ? 0 : src[6'h20 - inst[12:8]];
-              `zSRL :  cfctl = (inst[12:8]==0) ? 0 : src[inst[12:8] - 5'h01]; 
-              `zSRA :  cfctl = (inst[12:8]==0) ? 0 : src[inst[12:8] - 5'h01]; 
+              `zNEG :  cfctl = (src==32'b0) ? 1'b0 : 1'b1;
+              `zSLL :  cfctl = (inst[12:8]==0) ? 1'b0 : src[6'h20 - inst[12:8]];
+              `zSRL :  cfctl = (inst[12:8]==0) ? 1'b0 : src[inst[12:8] - 5'h01]; 
+              `zSRA :  cfctl = (inst[12:8]==0) ? 1'b0 : src[inst[12:8] - 5'h01]; 
               // s,w,rg1,rg2 
               `zADDI:  cfctl = d;  
               `zSUBI:  cfctl = ~d;  
@@ -152,7 +154,7 @@ module alu ( inst, tr, sr, out, st_refresh, sf, zf, cf, vf, pf );
         begin
             casex ( i[31:16] )
               // w,rg2
-              `zNEG :  vfctl = (src==32'h80000000) ? 1 : 0;
+              `zNEG :  vfctl = (src==32'h80000000) ? 1'b1 : 1'b0;
               `zSLL :  vfctl = 0; // とりあえず0
               `zSRL :  vfctl = 0; // 同上
               `zSRA :  vfctl = 0; // 同上

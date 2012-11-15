@@ -144,6 +144,7 @@ set_global_assignment -name EDA_TEST_BENCH_NAME dp_testbench -section_id eda_sim
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id dp_testbench
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME dp_testbench -section_id dp_testbench
 set_global_assignment -name EDA_TEST_BENCH_FILE src/dp_testbench.v -section_id dp_testbench
+set_global_assignment -name VERILOG_FILE src/program_counter.v
 set_global_assignment -name VERILOG_FILE src/mem.v
 set_global_assignment -name VERILOG_FILE src/alu.v
 set_global_assignment -name VERILOG_FILE src/adder.v

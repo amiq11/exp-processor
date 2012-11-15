@@ -16,8 +16,8 @@ module program_counter(phase, ct_taken, dr, pc, clk, n_rst);
         if (n_rst == 0) 
             pc <= 0;
         else if (phase[`ph_w] == 1  &&  ct_taken == 0)
-            pc <= pc + 4;
+            pc <= {pc[31:2],2'b0} + 4;
         else if (phase[`ph_w] == 1  &&  ct_taken == 1)
-            pc <= dr;
+            pc <= {dr[31:2],2'b0} + 4;
     end // always
 endmodule
