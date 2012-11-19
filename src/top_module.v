@@ -45,10 +45,11 @@
 // `define INST_CONST4 32'b1000_1001_01_000_001_00000000_00000000  // zST  r0 r1 0
 
 // LIL test
-// `define INST_0 32'b0110_0110_10_111_000_0101_0101_1010_1010 // zLIL 0x55AA r0
-// `define INST_1 32'b0110_0110_10_111_001_0101_0101_1010_1010 // zLIL 0x55AA r1
-// `define INST_2 32'b0110_0110_10_111_010_0101_0101_1010_1010 // zLIL 0x55AA r2
+`define INST_0 32'b0110_0110_10_111_000_0101_0101_1010_1010 // zLIL 0x55AA r0
+`define INST_1 32'b0110_0110_10_111_001_0101_0101_1010_1010 // zLIL 0x55AA r1
+`define INST_2 32'b0110_0110_10_111_010_0101_0101_1010_1010 // zLIL 0x55AA r2
 // `define INST_3 32'b0110_0110_10_111_011_0101_0101_1010_1010 // zLIL 0x55AA r3
+`define INST_3 32'b1111_0100_00000000_00000000_00000000 // zHLT
 
 // ST/LD
 // `define INST_0 32'b0110_0110_10_111_000_0101_0101_1010_1010 // zLIL 0x55AA r0
@@ -87,10 +88,10 @@
 // `define INST_3 32'b1100_0000_11_111_000_00001000_00000000  // zSRA  r0 8
 
 // B/Bcc
-`define INST_0 32'b1001_0000_1110_1011_00010000_00000000  // zB    16
-`define INST_1 32'b1001_0000_0111_0100_00010000_00000000  // zBcc  zf 16
-`define INST_2 32'b0011_1000_11_000_001_00000000_00000000 // zCMP  r0 r1
-`define INST_3 32'b1001_0000_0111_0100_00010000_00000000  // zBcc  zf 16
+// `define INST_0 32'b1001_0000_1110_1011_00010000_00000000  // zB    16
+// `define INST_1 32'b1001_0000_0111_0100_00010000_00000000  // zBcc  zf 16
+// `define INST_2 32'b0011_1000_11_000_001_00000000_00000000 // zCMP  r0 r1
+// `define INST_3 32'b1001_0000_0111_0100_00010000_00000000  // zBcc  zf 16
   
 
 `define memsize 9               // memsize+1ビットのアドレスを持つメモリを確保
@@ -142,7 +143,8 @@ module top_module(input              CLK,
     // register file
     wire [2:0]                        ra1, ra2, wa; // register file address
     wire [31:0]                       rd1, rd2, wd, resp, wespd; // register file data
-    wire                              hlt, we, wespen;
+    wire                              we, wespen;
+    reg                               hlt;
 
     // phase controller
     wire [`ph_w:`ph_f]                phase;
@@ -198,14 +200,16 @@ module top_module(input              CLK,
     assign ct_taken = (phase[`ph_w] & tttnctl( ir4, sf, zf, cf, vf ));
 
     // memory
-    assign mem_a1  = memctl_a1( ir4, dr2, pc1, ct_taken );
+    assign mem_a1  = pc1[`memsize+2:2];
+    assign mem_we1 = 1'b0;
+    assign mem_wd1 = 32'h00000000;
     assign mem_a2  = memctl_a2( ir2, tr );
     assign mem_wd2 = sr1;
     assign mem_we2 = memctl_wen2( ir2 );
 
     /* ------------------------------------------------------ */
     // phase generator
-    phase_gen pg(0, phase, CLK, N_RST);
+    phase_gen pg(hlt, phase, CLK, N_RST);
 
     /* ------------------------------------------------------ */
     // register
@@ -243,6 +247,7 @@ module top_module(input              CLK,
     // ホントはphase counterのお仕事？
     always @( posedge CLK or negedge N_RST ) begin
         if ( N_RST == 0 ) begin
+            hlt <= 0;
             ir1 <= 0; ir2 <= 0; ir3 <= 0; ir4 <= 0;
             tr <= 0;
             sr1 <= 0; sr2 <= 0;
@@ -250,6 +255,7 @@ module top_module(input              CLK,
             teststate <= 0;     // for simulation
             sf <= 0; zf <= 0; cf <= 0; vf <= 0; pf <= 0;
             pc2 <= 0;
+            mdr <= 0;
         end
         else begin
             if ( phase[`ph_f] ) begin
@@ -287,6 +293,7 @@ module top_module(input              CLK,
                 dr2 <= dr1;
             end
             if ( phase[`ph_w] ) begin
+                hlt <= ( {ir4[31:24],8'bxxxxxxxx} === `zHLT ) ? 1'b1 : 1'b0;
             end
         end // else: !if( N_RST == 0 )
     end // always @ ( posedge CLK, negedge N_RST )
@@ -408,17 +415,17 @@ module top_module(input              CLK,
 
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ //
     // memory controller
-    function [`memsize:0] memctl_a1;
-        input [31:0] inst,dr,pc;
-        input ct_taken;
-        begin
-            casex ( inst[31:16] )
-              `zB:     memctl_a1 = (ct_taken) ? dr[`memsize+2:2] + 1 : pc[`memsize+2:2];
-              `zBcc:   memctl_a1 = (ct_taken) ? dr[`memsize+2:2] + 1 : pc[`memsize+2:2];
-              default: memctl_a1 = pc[`memsize+2:2];
-            endcase // casex ( inst[31:16] )
-        end
-    endfunction // casex
+    // function [`memsize:0] memctl_a1;
+    //     input [31:0] inst,dr,pc;
+    //     input ct_taken;
+    //     begin
+    //         casex ( inst[31:16] )
+    //           `zB:     memctl_a1 = (ct_taken) ? dr[`memsize+2:2] : pc[`memsize+2:2];
+    //           `zBcc:   memctl_a1 = (ct_taken) ? dr[`memsize+2:2] : pc[`memsize+2:2];
+    //           default: memctl_a1 = pc[`memsize+2:2];
+    //         endcase // casex ( inst[31:16] )
+    //     end
+    // endfunction // casex
     
     function [`memsize:0] memctl_a2;
         input [31:0] inst, t;

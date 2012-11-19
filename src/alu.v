@@ -60,7 +60,7 @@ module alu ( inst, tr, sr, out, st_refresh, sf, zf, cf, vf, pf );
           // w,rg2
           `zPOP :  calc = t + 4;
           `zPUSH:  calc = t - 4;
-          `zLIL :  calc = {17'b0,i[15:0]};
+          `zLIL :  calc = {17'b0,i[7:0],i[15:8]};
           `zNEG :  calc = ~{t[31],t} + 1;
           `zNOT :  calc = ~t;
           `zSLL :  calc = t <<  i[12:8]; // 5bitにマスク

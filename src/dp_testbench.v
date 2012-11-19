@@ -20,7 +20,7 @@ module dp_testbench;
         clk = 0; n_rst = 1;
         #20 n_rst = 0;
         #20 n_rst = 1;
-        #1000 $finish;
+        #10000 $finish;
     end
     
  
