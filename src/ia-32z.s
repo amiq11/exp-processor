@@ -215,16 +215,16 @@
 
 .macro	zPUSH	rg2
 	.align 4
-	pushl	%e\rg2
 	nop
+	pushl	%e\rg2
 	nop
 	nop
 .endm
 
 .macro	zPOP	rg2
 	.align 4
-	popl	%e\rg2
 	nop
+	popl	%e\rg2
 	nop
 	nop
 .endm

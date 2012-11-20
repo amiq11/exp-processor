@@ -204,6 +204,7 @@ module top_module(input              CLK,
     assign mem_we1 = 1'b0;
     assign mem_wd1 = 32'h00000000;
     assign mem_a2  = memctl_a2( ir2, tr );
+    // assign mem_a2  = tr[`memsize+2:2];
     assign mem_wd2 = sr1;
     assign mem_we2 = memctl_wen2( ir2 );
 
@@ -272,7 +273,7 @@ module top_module(input              CLK,
             end
             if ( phase[`ph_r] ) begin
                 ir2 <= ir1;
-                sr1 <= rd1;
+                sr1 <= srctl( ir1, rd1, rd2 );
                 tr  <= trctl( ir1, pc2, resp, rd2 );
             end
             if ( phase[`ph_x] ) begin
@@ -318,6 +319,7 @@ module top_module(input              CLK,
                   `zB:     rfctl_wen = 0;
                   `zCMP:   rfctl_wen = 0;
                   `zCMPI:  rfctl_wen = 0;
+                  `zPUSH:  rfctl_wen = 0;
                   default: rfctl_wen = 1;
                 endcase // casex ( inst[31:16] )
             end
@@ -363,6 +365,17 @@ module top_module(input              CLK,
     endfunction
 
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ //
+    // sr
+    function [31:0] srctl;
+        input  [31:0] inst, rd1, rd2;
+        begin
+            casex ( inst[31:16] )
+              `zPUSH:  srctl = rd2;
+              default: srctl = rd1;
+            endcase // casex ( inst[31:16] )
+        end
+    endfunction // casex
+    
     // tr
     function [31:0] trctl;
         input  [31:0] inst, pc, resp, rd;
@@ -431,15 +444,15 @@ module top_module(input              CLK,
         input [31:0] inst, t;
         begin
             casex ( inst[31:16] )
-              `zLD:   memctl_a2 = t[`memsize:0] + {{2{inst[15]}},inst[15:8]};
-              `zST:   memctl_a2 = t[`memsize:0] + {{2{inst[15]}},inst[15:8]};
-              `zPUSH: memctl_a2 = t[`memsize:0];
-              `zPOP : memctl_a2 = t[`memsize:0];
+              `zLD:   memctl_a2 = t[`memsize+2:2];
+              `zST:   memctl_a2 = t[`memsize+2:2];
+              `zPUSH: memctl_a2 = t[`memsize+2:2];
+              `zPOP : memctl_a2 = (t[`memsize+2:0] + 4) >> 2;
               default: memctl_a2 = 0;
             endcase // case ( inst[31:16] )
         end
     endfunction // pg
-
+    
     function memctl_wen2;
         input  [31:0] inst;
         begin
