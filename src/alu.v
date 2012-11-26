@@ -60,13 +60,14 @@ module alu ( inst, tr, sr, out, st_refresh, sf, zf, cf, vf, pf );
           // w,rg2
           `zPOP :  calc = t + 4;
           `zPUSH:  calc = t - 4;
+          `zRET :  calc = t + 4; // =pop
+          `zJALR:  calc = t - 4; // =push
           `zLIL :  calc = {17'b0,i[7:0],i[15:8]};
           `zNEG :  calc = ~{t[31],t} + 1;
           `zNOT :  calc = ~t;
           `zSLL :  calc = t <<  i[12:8]; // 5bitにマスク
           `zSRL :  calc = t >>  i[12:8]; // 同上
           `zSRA :  calc = {{32{t[31]}},t} >>> i[12:8]; // 同上
-          // `zJALR: まだ
           `zJR  :  calc = t;
           // s,w,rg1,rg2
           `zADDI:  calc = (i[25]) ? {1'b0,t} + {1'b0,{24{i[15]}},i[15:8]} : {1'b0,t} + {1'b0,24'b0,i[15:8]};

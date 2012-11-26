@@ -163,50 +163,50 @@ module top_module(input              CLK,
     wire   alustf, alusf, aluzf, alucf, aluvf, alupf; // alu flag 
 
     // memory
-    wire   [31:0]                     mem_wd1, mem_wd2, mem_rd1, mem_rd2; // memory data
+    wire   [31:0]                     mem_wd1, mem_rd1, mem_rd2; // memory data
     wire   [`memsize:0]               mem_a1, mem_a2;                     // memory address
     wire                              mem_we1, mem_we2;                   // memory write enable
+    reg    [31:0]                     mem_wd2;
 
     // program counter
     wire   [31:0]                     pc1; // program counter
-    reg    [31:0]                     pc2; // program counter for pipeline
+    reg    [31:0]                     pc2,pc3,pc4,pc5; // program counter for pipeline
+    reg    [31:0]                     ct_pc;           // distination
     wire                              ct_taken; // conditional branch
+    wire                              ct_mdr;   // conditional branch by mdr
 
     // instruction decoder
     wire                              s,w;            // sign, opsize
     wire   [7:0]                      sim8;
 
-    // test state controller
-    reg    [1:0]                      teststate; // for simulation
-
     // ************************************************ //
     // assign
     
     // register file
-    assign ra1 = ir1[21:19];
-    assign ra2 = ir1[18:16];
-    assign we  = rfctl_wen( ir4, phase[`ph_w] ); // phase writebackのときに書き戻し
-    assign wa  = rfctl_wa( ir4 );
-    assign wd  = rfctl_wd( ir4, dr2, mdr );
-    assign wespd  = dr2;                               // esp data
+    assign ra1    = ir1[21:19];
+    assign ra2    = ir1[18:16];
+    assign we     = rfctl_wen( ir4, phase[`ph_w] ); // phase writebackのときに書き戻し
+    assign wa     = rfctl_wa( ir4 );
+    assign wd     = rfctl_wd( ir4, dr2, mdr );
     assign wespen = rfctl_wespen( ir4, phase[`ph_w] ); // esp write enable
+    assign wespd  = rfctl_wespd( ir4, pc5, dr2 );
 
     // alu
     assign alui  = ir2;
     assign alutr = tr;
     assign alusr = sr1;
-
+    
     // program counter
-    assign ct_taken = (phase[`ph_w] & tttnctl( ir4, sf, zf, cf, vf ));
+    assign ct_taken = (phase[`ph_w] & ct_takenctl( ir4, sf, zf, cf, vf ));
 
     // memory
     assign mem_a1  = pc1[`memsize+2:2];
     assign mem_we1 = 1'b0;
     assign mem_wd1 = 32'h00000000;
-    assign mem_a2  = memctl_a2( ir2, tr );
+    assign mem_a2  = memctl_a2( ir2, aluout[31:0] );
     // assign mem_a2  = tr[`memsize+2:2];
-    assign mem_wd2 = sr1;
-    assign mem_we2 = memctl_wen2( ir2 );
+    // assign mem_wd2 = mwd;
+    assign mem_we2 = phase[`ph_m] & memctl_wen2( ir2 );
 
     /* ------------------------------------------------------ */
     // phase generator
@@ -240,7 +240,7 @@ module top_module(input              CLK,
 
     /* ------------------------------------------------------ */
     // pc
-    program_counter program_counter( phase, ct_taken, dr2, pc1, CLK, N_RST );
+    program_counter program_counter( phase, ct_taken, ct_pc, pc1, CLK, N_RST );
     
     
     /* ------------------------------------------------------ */
@@ -253,32 +253,29 @@ module top_module(input              CLK,
             tr <= 0;
             sr1 <= 0; sr2 <= 0;
             dr1 <= 0; dr2 <= 0;
-            teststate <= 0;     // for simulation
             sf <= 0; zf <= 0; cf <= 0; vf <= 0; pf <= 0;
-            pc2 <= 0;
-            mdr <= 0;
+            pc2 <= 0; pc3 <= 0; pc4 <= 0; pc5 <= 0;
+            mdr <= 0; mem_wd2 <= 0;
+            ct_pc <= 0;
         end
         else begin
             if ( phase[`ph_f] ) begin
+                pc2 <= pc1;
                 ir1 <= mem_rd1;  // MD -> IR1
                 // ra1, ra2の更新はir1を使ってfunctionで行われる
-                // case ( teststate )
-                //   0: ir1 <= `INST_0;
-                //   1: ir1 <= `INST_1;
-                //   2: ir1 <= `INST_2;
-                //   3: ir1 <= `INST_3;
-                // endcase
-                // teststate <= teststate + 1;
-                pc2 <= pc1;
             end
             if ( phase[`ph_r] ) begin
+                pc3 <= pc2;
                 ir2 <= ir1;
+                mem_wd2 <= mem_wd2ctl( ir1, rd1, rd2, pc2 );
                 sr1 <= srctl( ir1, rd1, rd2 );
                 tr  <= trctl( ir1, pc2, resp, rd2 );
             end
             if ( phase[`ph_x] ) begin
+                pc4 <= pc3;
                 // irの更新
                 ir3 <= ir2;
+                sr2 <= sr1;
                 dr1 <= aluout[31:0];                
                 // status registerの更新
                 if ( alustf ) begin
@@ -289,9 +286,11 @@ module top_module(input              CLK,
                 end
             end
             if ( phase[`ph_m] ) begin
-                ir4 <= ir3;
-                mdr <= mem_rd2; // いつも入れてもいいもんなのかは微妙？ wフェーズで無視すればOKなはず
-                dr2 <= dr1;
+                pc5 <= pc4;
+                ir4   <= ir3;
+                mdr   <= mem_rd2; // いつも入れてもいいもんなのかは微妙？ wフェーズで無視すればOKなはず
+                dr2   <= dr1;
+                ct_pc <= ct_pcctl( ir3, dr1, sr2, mem_rd2 );
             end
             if ( phase[`ph_w] ) begin
                 hlt <= ( {ir4[31:24],8'bxxxxxxxx} === `zHLT ) ? 1'b1 : 1'b0;
@@ -355,6 +354,8 @@ module top_module(input              CLK,
                 casex ( inst[31:16] )
                   `zPOP:   rfctl_wespen = 1;
                   `zPUSH:  rfctl_wespen = 1;
+                  `zJALR:  rfctl_wespen = 1;
+                  `zRET:   rfctl_wespen = 1;
                   default: rfctl_wespen = 0;
                 endcase // case ( inst[31:16] )
             end
@@ -362,15 +363,28 @@ module top_module(input              CLK,
                 rfctl_wespen = 0;
             end
         end
-    endfunction
+    endfunction // if
+    function [31:0] rfctl_wespd;
+        input  [31:0] inst, pc, dr;
+        begin
+            casex( inst[31:16] )
+              `zPOP:    rfctl_wespd = dr;
+              `zPUSH:   rfctl_wespd = dr;
+              `zJALR:   rfctl_wespd = dr;
+              `zRET:    rfctl_wespd = dr;
+              default:  rfctl_wespd = 32'h00000000;
+            endcase // casex ( inst[31:16] )
+        end
+    endfunction // casex
+    
 
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ //
     // sr
     function [31:0] srctl;
         input  [31:0] inst, rd1, rd2;
         begin
-            casex ( inst[31:16] )
-              `zPUSH:  srctl = rd2;
+            casex( inst[31:16] )
+              `zJALR : srctl = rd2;
               default: srctl = rd1;
             endcase // casex ( inst[31:16] )
         end
@@ -381,10 +395,12 @@ module top_module(input              CLK,
         input  [31:0] inst, pc, resp, rd;
         begin
             casex ( inst[31:16] )
-              `zB:   trctl = pc;
-              `zBcc: trctl = pc;
-              `zPOP: trctl = resp;
-              `zPUSH:trctl = resp;
+              `zB   : trctl = pc;
+              `zBcc : trctl = pc;
+              `zPOP : trctl = resp;
+              `zPUSH: trctl = resp;
+              `zJALR: trctl = resp;
+              `zRET : trctl = resp;  
               default: trctl = rd;
             endcase // casex ( inst[31:16] )
         end
@@ -392,36 +408,55 @@ module top_module(input              CLK,
     
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ //
     // tttn
-    function  tttnctl;
+    function  ct_takenctl;
         input [31:0] inst;
         input sf, zf, cf, vf;
         begin
             casex ( inst[31:16] )
               `zBcc: begin
                   case ( inst[19:16] )
-                    `ct_o  : tttnctl = vf;
-                    `ct_no : tttnctl = ~vf;
-                    `ct_b  : tttnctl = cf;  
-                    `ct_nb : tttnctl = ~cf; 
-                    `ct_e  : tttnctl = zf;  
-                    `ct_ne : tttnctl = ~zf; 
-                    `ct_be : tttnctl = cf | zf;  
-                    `ct_nbe: tttnctl = ~(cf | zf); 
-                    `ct_s  : tttnctl = sf;  
-                    `ct_ns : tttnctl = ~sf; 
-                    `ct_p  : tttnctl = pf;  
-                    `ct_np : tttnctl = ~pf; 
-                    `ct_l  : tttnctl = sf ^ vf;  
-                    `ct_nl : tttnctl = ~( sf ^ vf ); 
-                    `ct_le : tttnctl = ( sf ^ vf ) | zf;  
-                    `ct_nle: tttnctl = ~( ( sf ^ vf ) | zf );
+                    `ct_o  : ct_takenctl = vf;
+                    `ct_no : ct_takenctl = ~vf;
+                    `ct_b  : ct_takenctl = cf;  
+                    `ct_nb : ct_takenctl = ~cf; 
+                    `ct_e  : ct_takenctl = zf;  
+                    `ct_ne : ct_takenctl = ~zf; 
+                    `ct_be : ct_takenctl = cf | zf;  
+                    `ct_nbe: ct_takenctl = ~(cf | zf); 
+                    `ct_s  : ct_takenctl = sf;  
+                    `ct_ns : ct_takenctl = ~sf; 
+                    `ct_p  : ct_takenctl = pf;  
+                    `ct_np : ct_takenctl = ~pf; 
+                    `ct_l  : ct_takenctl = sf ^ vf;  
+                    `ct_nl : ct_takenctl = ~( sf ^ vf ); 
+                    `ct_le : ct_takenctl = ( sf ^ vf ) | zf;  
+                    `ct_nle: ct_takenctl = ~( ( sf ^ vf ) | zf );
                   endcase // case ( inst[19:16] )
               end
               `zB:
-                tttnctl = 1'b1;
+                ct_takenctl = 1'b1;
+              `zJR:
+                ct_takenctl = 1'b1;
+              `zJALR:
+                ct_takenctl = 1'b1;
+              `zRET:
+                ct_takenctl = 1'b1;
               default:
-                tttnctl = 1'b0;
+                ct_takenctl = 1'b0;
             endcase // casex ( inst )
+        end
+    endfunction // casex
+    function [31:0] ct_pcctl;
+        input  [31:0] inst, dr, rg, md;
+        begin
+            casex ( inst[31:16] )
+              `zBcc  : ct_pcctl = dr + 3;
+              `zB    : ct_pcctl = dr + 3;
+              `zJR   : ct_pcctl = rg;
+              `zJALR : ct_pcctl = rg;
+              `zRET  : ct_pcctl = md;
+              default: ct_pcctl = 32'h00000000;
+            endcase // casex ( inst[31:16] )
         end
     endfunction // casex
     
@@ -440,14 +475,27 @@ module top_module(input              CLK,
     //     end
     // endfunction // casex
     
+    function [31:0] mem_wd2ctl;
+        input  [31:0] inst, rd1, rd2, pc;
+        begin
+            casex ( inst[31:16] )
+              `zPUSH:  mem_wd2ctl = rd2;
+              `zJALR:  mem_wd2ctl = pc + 4;
+              `zST  :  mem_wd2ctl = rd1;
+              default: mem_wd2ctl = 32'h00000000;
+            endcase // casex ( inst[31:16] )
+        end
+    endfunction // casex
     function [`memsize:0] memctl_a2;
         input [31:0] inst, t;
         begin
             casex ( inst[31:16] )
               `zLD:   memctl_a2 = t[`memsize+2:2];
               `zST:   memctl_a2 = t[`memsize+2:2];
-              `zPUSH: memctl_a2 = t[`memsize+2:2];
-              `zPOP : memctl_a2 = (t[`memsize+2:0] + 4) >> 2;
+              `zPUSH: memctl_a2 = (t[`memsize+2:0] + 4) >> 2;
+              `zPOP : memctl_a2 = t[`memsize+2:2];
+              `zJALR: memctl_a2 = (t[`memsize+2:0] + 4) >> 2;
+              `zRET : memctl_a2 = t[`memsize+2:2];
               default: memctl_a2 = 0;
             endcase // case ( inst[31:16] )
         end
@@ -459,6 +507,7 @@ module top_module(input              CLK,
             casex ( inst[31:16] )
               `zST:    memctl_wen2 = 1;
               `zPUSH:  memctl_wen2 = 1;
+              `zJALR:  memctl_wen2 = 1;
               default: memctl_wen2 = 0;
             endcase
         end
