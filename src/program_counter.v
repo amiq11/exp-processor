@@ -12,17 +12,13 @@ module program_counter(phase_f, phase_w, ct_taken, ct_pc, pc, clk, n_rst, hlt);
     
     always @(posedge clk) begin
         if (!n_rst | hlt) 
-          pcr <= 32'hFFFFFFFF;
+          pcr <= 0;
         else begin
-            // if ( phase_f ) pcr <= (pcr + 4) & 32'hFFFFFFFC;
-            // else if ( phase_w && ct_taken ) pcr <= ct_pc & 32'hFFFFFFFC;
             pcr <= pcctl( pcr, ct_pc, ct_taken, phase_f, phase_w );
         end
     end // always
 
-    // assign pc = pcr;
-
-    assign pc = pcctl( pcr, ct_pc, ct_taken, phase_f, phase_w );
+    assign pc = (n_rst) ? pcctl( pcr, ct_pc, ct_taken, phase_f, phase_w ) : 0;
 
     function [31:0] pcctl;
         input [31:0] pc, dr;

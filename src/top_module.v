@@ -72,6 +72,9 @@ module top_module(input              CLK,
                   output wire [63:0] SEG_OUT,
                   output wire [7:0]  SEG_SEL);
 
+    // reset
+    reg                               rst;
+    
     // 7seg
     reg [7:0]                         r_controller; // 7seg disp
     wire [31:0]                       r_reg [0:7];  // 7seg disp
@@ -187,6 +190,7 @@ module top_module(input              CLK,
     /* ------------------------------------------------------ */
     // control
     always @( posedge CLK or negedge N_RST ) begin
+        rst <= N_RST;
         if ( N_RST == 0 ) begin
             hlt <= 0;
             ir1 <= {`zNOP, 16'b0 }; ir2 <= {`zNOP, 16'b0 }; ir3 <= {`zNOP, 16'b0 }; ir4 <= {`zNOP, 16'b0 };
@@ -198,7 +202,7 @@ module top_module(input              CLK,
             mdr <= 0; mem_wd2 <= 0;
             ct_pc <= 0;
         end
-        else begin
+        else if ( !hlt ) begin
             if ( n_f ) begin
                 pc2 <= pc1;
                 ir1 <= mem_rd1;  // MD -> IR1
