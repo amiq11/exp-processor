@@ -1,11 +1,5 @@
 	.include "ia-32z.s"
 	.text
-#.globl _f
-#        .def	_f;
-#        .scl	2;
-#        .type	32;
-#        .endef
-_f:
 init:   
 	zLIL	1,  cx
         zLIL    10, bx
