@@ -72,9 +72,6 @@ module top_module(input              CLK,
                   output wire [63:0] SEG_OUT,
                   output wire [7:0]  SEG_SEL);
 
-    // reset
-    reg                               rst;
-    
     // 7seg
     reg [7:0]                         r_controller; // 7seg disp
     wire [31:0]                       r_reg [0:7];  // 7seg disp
@@ -190,7 +187,6 @@ module top_module(input              CLK,
     /* ------------------------------------------------------ */
     // control
     always @( posedge CLK or negedge N_RST ) begin
-        rst <= N_RST;
         if ( N_RST == 0 ) begin
             hlt <= 0;
             ir1 <= {`zNOP, 16'b0 }; ir2 <= {`zNOP, 16'b0 }; ir3 <= {`zNOP, 16'b0 }; ir4 <= {`zNOP, 16'b0 };
@@ -404,8 +400,8 @@ module top_module(input              CLK,
         input  [31:0] inst, dr, rg, md;
         begin
             casex ( inst[31:16] )
-              `zBcc  : ct_pcctl = dr + 3;
-              `zB    : ct_pcctl = dr + 3;
+              `zBcc  : ct_pcctl = dr;
+              `zB    : ct_pcctl = dr;
               `zJR   : ct_pcctl = rg;
               `zJALR : ct_pcctl = rg;
               `zRET  : ct_pcctl = md;
