@@ -1,8 +1,8 @@
-`define ph_f 0
-`define ph_r 1
-`define ph_x 2
-`define ph_m 3
-`define ph_w 4
+// `define ph_f 0
+// `define ph_r 1
+// `define ph_x 2
+// `define ph_m 3
+// `define ph_w 4
 
 `define eax 3'b000
 `define ecx 3'b001
@@ -29,70 +29,6 @@
 `define ct_nl  4'b1101
 `define ct_le  4'b1110
 `define ct_nle 4'b1111
-
-
-// `define INST_CONST 32'b00_000_001_11_000_001_00000000_00000000 // zADD r0 r1
-// `define INST_CONST 32'b00_101_001_11_000_001_00000000_00000000 // zSUB r0 r1
-// `define INST_CONST 32'b00_111_001_11_000_001_00000000_00000000 // zCMP r0 r1
-// `define INST_CONST 32'b00_100_001_11_000_001_00000000_00000000 // zAND r0 r1
-// `define INST_CONST 32'b00_001_001_11_000_001_00000000_00000000 // zOR  r0 r1
-// `define INST_CONST 32'b00_110_001_11_000_001_00000000_00000000 // zXOR r0 r1
-// `define INST_CONST 32'b00_000_001_11_000_001_00000000_00000000 // zADD r0 r1
-
-// `define INST_CONST1 32'b1000_1011_01_000_001_00000000_00000000  // zLD  r0 r1 0
-// `define INST_CONST2 32'b00_000_001_11_000_111_00000000_00000000 // zADD r0 r7
-// `define INST_CONST3 32'b00_000_001_11_010_111_00000000_00000000 // zADD r2 r7
-// `define INST_CONST4 32'b1000_1001_01_000_001_00000000_00000000  // zST  r0 r1 0
-
-// LIL test
-`define INST_0 32'b0110_0110_10_111_000_0101_0101_1010_1010 // zLIL 0x55AA r0
-`define INST_1 32'b0110_0110_10_111_001_0101_0101_1010_1010 // zLIL 0x55AA r1
-`define INST_2 32'b0110_0110_10_111_010_0101_0101_1010_1010 // zLIL 0x55AA r2
-// `define INST_3 32'b0110_0110_10_111_011_0101_0101_1010_1010 // zLIL 0x55AA r3
-`define INST_3 32'b1111_0100_00000000_00000000_00000000 // zHLT
-
-// ST/LD
-// `define INST_0 32'b0110_0110_10_111_000_0101_0101_1010_1010 // zLIL 0x55AA r0
-// `define INST_1 32'b1000_1001_01_000_001_1111_1111_0000_0000 // zST  r0 r1 -1
-// `define INST_2 32'b0110_0110_10_111_000_1010_1010_0101_0101 // zLIL 0xAA00 r0
-// `define INST_3 32'b1000_1011_01_000_001_1111_1111_0000_0000 // zLD  r0 r1 -1
-
-// MOV/ADD
-// `define INST_0 32'b00_000_001_11_000_001_00000000_00000000  // zADD r0 r1
-// `define INST_1 32'b1000_1001_01_001_111_1111_1111_0000_0000 // zST  r1 r7 -1
-// `define INST_2 32'b1000_1000_11_001_010_0000_0000_0000_0000 // zMOV r1 r2
-// `define INST_3 32'b1000_1011_01_011_111_1111_1111_0000_0000 // zLD  r3 r7 -1
-
-// SUB/CMP
-// `define INST_0 32'b00_101_001_11_000_001_00000000_00000000  // zSUB r0 r1
-// `define INST_1 32'b00_101_001_11_000_001_00000000_00000000  // zSUB r0 r1
-// `define INST_2 32'b00_111_001_11_000_001_00000000_00000000  // zCMP r0 r1
-// `define INST_3 32'b00_111_001_11_010_001_00000000_00000000  // zCMP r2 r1
-
-// SUB/ADD
-// `define INST_0 32'b00_101_001_11_000_001_00000000_00000000  // zSUB r0 r1
-// `define INST_1 32'b00_101_001_11_000_001_00000000_00000000  // zSUB r0 r1
-// `define INST_2 32'b00_000_001_11_000_001_00000000_00000000  // zADD r0 r1
-// `define INST_3 32'b00_000_001_11_000_001_00000000_00000000  // zADD r0 r1
-
-// ADDI/SUBI
-// `define INST_0 32'b1000_0000_11_101_001_01000000_00000000  // zSUBI    r1, 64
-// `define INST_1 32'b1000_0000_11_111_001_11000000_00000000  // zCMPI    r1, 
-// `define INST_2 32'b1000_0000_11_000_001_00111111_00000000  // zADDI    r1, 63
-// `define INST_3 32'b1000_0000_11_000_001_00000010_00000000  // zADDI    r1, 2
-
-// SLL/SRL/SRA
-// `define INST_0 32'b0110_0110_10_111_000_10101010_10100000  // zLIL  r0 0x0AA0
-// `define INST_1 32'b1100_0000_11_100_000_00010000_00000000  // zSLL  r0 16
-// `define INST_2 32'b1100_0000_11_101_000_00000001_00000000  // zSRL  r0 1
-// `define INST_3 32'b1100_0000_11_111_000_00001000_00000000  // zSRA  r0 8
-
-// B/Bcc
-// `define INST_0 32'b1001_0000_1110_1011_00010000_00000000  // zB    16
-// `define INST_1 32'b1001_0000_0111_0100_00010000_00000000  // zBcc  zf 16
-// `define INST_2 32'b0011_1000_11_000_001_00000000_00000000 // zCMP  r0 r1
-// `define INST_3 32'b1001_0000_0111_0100_00010000_00000000  // zBcc  zf 16
-  
 
 `define memsize 9               // memsize+1ビットのアドレスを持つメモリを確保
 
@@ -147,7 +83,7 @@ module top_module(input              CLK,
     reg                               hlt;
 
     // phase controller
-    wire [`ph_w:`ph_f]                phase;
+    // wire [`ph_w:`ph_f]                phase;
 
     // core register
     reg    [31:0]                     ir1, ir2, ir3, ir4,
@@ -160,24 +96,23 @@ module top_module(input              CLK,
     // alu
     wire   [31:0]                     alui, alutr, alusr; // alu in
     wire   [32:0]                     aluout;       // alu out
-    wire   alustf, alusf, aluzf, alucf, aluvf, alupf; // alu flag 
+    wire                              alustf, alusf, aluzf, alucf, aluvf, alupf; // alu flag 
 
     // memory
     wire   [31:0]                     mem_wd1, mem_rd1, mem_rd2; // memory data
-    wire   [`memsize:0]               mem_a1, mem_a2;                     // memory address
-    wire                              mem_we1, mem_we2;                   // memory write enable
+    wire   [`memsize:0]               mem_a1, mem_a2;            // memory address
+    wire                              mem_we1, mem_we2;          // memory write enable
     reg    [31:0]                     mem_wd2;
 
     // program counter
-    wire   [31:0]                     pc1; // program counter
+    wire   [31:0]                     pc1;             // program counter
     reg    [31:0]                     pc2,pc3,pc4,pc5; // program counter for pipeline
     reg    [31:0]                     ct_pc;           // distination
-    wire                              ct_taken; // conditional branch
-    wire                              ct_mdr;   // conditional branch by mdr
+    wire                              ct_taken;        // conditional branch
+    wire                              ct_mdr;          // conditional branch by mdr
 
-    // instruction decoder
-    wire                              s,w;            // sign, opsize
-    wire   [7:0]                      sim8;
+    // hazard detector
+    wire                              n_f, n_r, n_x, n_m, n_w;
 
     // ************************************************ //
     // assign
@@ -185,10 +120,10 @@ module top_module(input              CLK,
     // register file
     assign ra1    = ir1[21:19];
     assign ra2    = ir1[18:16];
-    assign we     = rfctl_wen( ir4, phase[`ph_w] ); // phase writebackのときに書き戻し
+    assign we     = rfctl_wen( ir4, n_w ); // phase writebackのときに書き戻し
     assign wa     = rfctl_wa( ir4 );
     assign wd     = rfctl_wd( ir4, dr2, mdr );
-    assign wespen = rfctl_wespen( ir4, phase[`ph_w] ); // esp write enable
+    assign wespen = rfctl_wespen( ir4, n_w ); // esp write enable
     assign wespd  = rfctl_wespd( ir4, pc5, dr2 );
 
     // alu
@@ -197,7 +132,7 @@ module top_module(input              CLK,
     assign alusr = sr1;
     
     // program counter
-    assign ct_taken = (phase[`ph_w] & ct_takenctl( ir4, sf, zf, cf, vf ));
+    assign ct_taken = (n_w & ct_takenctl( ir4, sf, zf, cf, vf ));
 
     // memory
     assign mem_a1  = pc1[`memsize+2:2];
@@ -206,11 +141,11 @@ module top_module(input              CLK,
     assign mem_a2  = memctl_a2( ir2, aluout[31:0] );
     // assign mem_a2  = tr[`memsize+2:2];
     // assign mem_wd2 = mwd;
-    assign mem_we2 = phase[`ph_m] & memctl_wen2( ir2 );
+    assign mem_we2 = n_x & memctl_wen2( ir2 );
 
     /* ------------------------------------------------------ */
     // phase generator
-    phase_gen pg(hlt, phase, CLK, N_RST);
+    // phase_gen pg(hlt, phase, CLK, N_RST);
 
     /* ------------------------------------------------------ */
     // register
@@ -240,16 +175,21 @@ module top_module(input              CLK,
 
     /* ------------------------------------------------------ */
     // pc
-    program_counter program_counter( phase, ct_taken, ct_pc, pc1, CLK, N_RST );
+    program_counter program_counter( n_f, n_w, ct_taken, ct_pc, pc1, CLK, N_RST, hlt );
+
+    /* ------------------------------------------------------ */
+    // hazard detector
+    // データハザードを検知したらフラグを立てて、次のステージに進んでいいかどうかを判断する。
+    hazard_detector hd( ir1, ir2, ir3, ir4, n_f, n_r, n_x, n_m, n_w );
+    
     
     
     /* ------------------------------------------------------ */
     // control
-    // ホントはphase counterのお仕事？
     always @( posedge CLK or negedge N_RST ) begin
         if ( N_RST == 0 ) begin
             hlt <= 0;
-            ir1 <= 0; ir2 <= 0; ir3 <= 0; ir4 <= 0;
+            ir1 <= {`zNOP, 16'b0 }; ir2 <= {`zNOP, 16'b0 }; ir3 <= {`zNOP, 16'b0 }; ir4 <= {`zNOP, 16'b0 };
             tr <= 0;
             sr1 <= 0; sr2 <= 0;
             dr1 <= 0; dr2 <= 0;
@@ -259,19 +199,20 @@ module top_module(input              CLK,
             ct_pc <= 0;
         end
         else begin
-            if ( phase[`ph_f] ) begin
+            if ( n_f ) begin
                 pc2 <= pc1;
                 ir1 <= mem_rd1;  // MD -> IR1
                 // ra1, ra2の更新はir1を使ってfunctionで行われる
-            end
-            if ( phase[`ph_r] ) begin
+            end 
+            if ( n_r ) begin
                 pc3 <= pc2;
                 ir2 <= ir1;
                 mem_wd2 <= mem_wd2ctl( ir1, rd1, rd2, pc2 );
                 sr1 <= srctl( ir1, rd1, rd2 );
                 tr  <= trctl( ir1, pc2, resp, rd2 );
+                if ( ~n_f & ~ct_taken ) ir1 <= {`zNOP, 16'b0 };
             end
-            if ( phase[`ph_x] ) begin
+            if ( n_x ) begin
                 pc4 <= pc3;
                 // irの更新
                 ir3 <= ir2;
@@ -284,16 +225,25 @@ module top_module(input              CLK,
                     cf <= alucf;
                     vf <= aluvf;
                 end
+                if ( ~n_r & ~ct_taken ) ir2 <= {`zNOP, 16'b0 };
             end
-            if ( phase[`ph_m] ) begin
-                pc5 <= pc4;
+            if ( n_m ) begin
+                pc5   <= pc4;
                 ir4   <= ir3;
                 mdr   <= mem_rd2; // いつも入れてもいいもんなのかは微妙？ wフェーズで無視すればOKなはず
                 dr2   <= dr1;
                 ct_pc <= ct_pcctl( ir3, dr1, sr2, mem_rd2 );
+                if ( ~n_x & ~ct_taken ) ir3 <= {`zNOP, 16'b0 };
             end
-            if ( phase[`ph_w] ) begin
+            if ( n_w ) begin
                 hlt <= ( {ir4[31:24],8'bxxxxxxxx} === `zHLT ) ? 1'b1 : 1'b0;
+                if ( ~n_m & ~ct_taken ) ir4 <= {`zNOP, 16'b0 };
+            end
+            if ( ct_taken ) begin
+                ir1 <=  {`zNOP, 16'b0 };
+                ir2 <=  {`zNOP, 16'b0 };
+                ir3 <=  {`zNOP, 16'b0 };
+                ir4 <=  {`zNOP, 16'b0 };
             end
         end // else: !if( N_RST == 0 )
     end // always @ ( posedge CLK, negedge N_RST )
@@ -463,17 +413,6 @@ module top_module(input              CLK,
 
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ //
     // memory controller
-    // function [`memsize:0] memctl_a1;
-    //     input [31:0] inst,dr,pc;
-    //     input ct_taken;
-    //     begin
-    //         casex ( inst[31:16] )
-    //           `zB:     memctl_a1 = (ct_taken) ? dr[`memsize+2:2] : pc[`memsize+2:2];
-    //           `zBcc:   memctl_a1 = (ct_taken) ? dr[`memsize+2:2] : pc[`memsize+2:2];
-    //           default: memctl_a1 = pc[`memsize+2:2];
-    //         endcase // casex ( inst[31:16] )
-    //     end
-    // endfunction // casex
     
     function [31:0] mem_wd2ctl;
         input  [31:0] inst, rd1, rd2, pc;
