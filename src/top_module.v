@@ -72,6 +72,8 @@ module top_module(input              CLK,
                   output wire [63:0] SEG_OUT,
                   output wire [7:0]  SEG_SEL);
 
+    reg                               hlt;
+    
     // 7seg
     reg [7:0]                         r_controller; // 7seg disp
     wire [31:0]                       r_reg [0:7];  // 7seg disp
@@ -80,7 +82,7 @@ module top_module(input              CLK,
     wire [2:0]                        ra1, ra2, wa; // register file address
     wire [31:0]                       rd1, rd2, wd, resp, wespd; // register file data
     wire                              we, wespen;
-    reg                               hlt;
+    wire   [31:0]                     rg1, rg2;
 
     // phase controller
     // wire [`ph_w:`ph_f]                phase;
@@ -112,7 +114,8 @@ module top_module(input              CLK,
     wire                              ct_mdr;          // conditional branch by mdr
 
     // hazard detector
-    wire                              n_f, n_r, n_x, n_m, n_w;
+    wire                              n_f,n_r, n_x, n_m, n_w;
+    wire   [1:0]                      direct_r1, direct_r2;
 
     // ************************************************ //
     // assign
@@ -125,6 +128,8 @@ module top_module(input              CLK,
     assign wd     = rfctl_wd( ir4, dr2, mdr );
     assign wespen = rfctl_wespen( ir4, n_w ); // esp write enable
     assign wespd  = rfctl_wespd( ir4, pc5, dr2 );
+    assign rg1    = rfsel_rg( rd1, aluout[31:0], dr1, dr2, direct_r1 );
+    assign rg2    = rfsel_rg( rd2, aluout[31:0], dr1, dr2, direct_r2 );
 
     // alu
     assign alui  = ir2;
@@ -180,7 +185,7 @@ module top_module(input              CLK,
     /* ------------------------------------------------------ */
     // hazard detector
     // データハザードを検知したらフラグを立てて、次のステージに進んでいいかどうかを判断する。
-    hazard_detector hd( ir1, ir2, ir3, ir4, n_f, n_r, n_x, n_m, n_w );
+    hazard_detector hd( ir1, ir2, ir3, ir4, n_f, n_r, n_x, n_m, n_w, direct_r1, direct_r2 );
     
     
     
@@ -207,9 +212,9 @@ module top_module(input              CLK,
             if ( n_r ) begin
                 pc3 <= pc2;
                 ir2 <= ir1;
-                mem_wd2 <= mem_wd2ctl( ir1, rd1, rd2, pc2 );
-                sr1 <= srctl( ir1, rd1, rd2 );
-                tr  <= trctl( ir1, pc2, resp, rd2 );
+                mem_wd2 <= mem_wd2ctl( ir1, rg1, rg2, pc2 );
+                sr1 <= srctl( ir1, rg1, rg2 );
+                tr  <= trctl( ir1, pc2, resp, rg2 );
                 if ( ~n_f & ~ct_taken ) ir1 <= {`zNOP, 16'b0 };
             end
             if ( n_x ) begin
@@ -326,6 +331,19 @@ module top_module(input              CLK,
             endcase // casex ( inst[31:16] )
         end
     endfunction // casex
+
+    function [31:0] rfsel_rg;
+        input  [31:0] rd, xd, md, wd;
+        input  [1:0] sel;
+        begin
+            case ( sel )
+              0: rfsel_rg = rd;
+              1: rfsel_rg = xd;
+              2: rfsel_rg = md;
+              3: rfsel_rg = wd;
+            endcase // case ( sel )
+        end
+    endfunction // casex
     
 
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ //
@@ -419,7 +437,7 @@ module top_module(input              CLK,
         begin
             casex ( inst[31:16] )
               `zPUSH:  mem_wd2ctl = rd2;
-              `zJALR:  mem_wd2ctl = pc + 4;
+              `zJALR:  mem_wd2ctl = pc;
               `zST  :  mem_wd2ctl = rd1;
               default: mem_wd2ctl = 32'h00000000;
             endcase // casex ( inst[31:16] )

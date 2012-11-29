@@ -33,11 +33,12 @@
 `define zHLT  16'b 1111_0100_xxxx_xxxx     // hlt
 
 module hazard_detector ( ir_r, ir_x, ir_m, ir_w,
-                         next_f, next_r, next_x, next_m, next_w
+                         next_f, next_r, next_x, next_m, next_w,
+                         direct_r1, direct_r2
                          );
     input  [31:0] ir_r, ir_x, ir_m, ir_w;
     output next_f, next_r, next_x, next_m, next_w;
-
+    output [1:0] direct_r1, direct_r2;
     wire   w, m, x, r, f;
 
     assign f = next_fctl( ir_r, ir_x, ir_m, ir_w );
@@ -46,10 +47,12 @@ module hazard_detector ( ir_r, ir_x, ir_m, ir_w,
     assign m = next_mctl( ir_r, ir_x, ir_m, ir_w );
     assign w = next_wctl( ir_r, ir_x, ir_m, ir_w );
     assign next_f = w & m & x & r & f;
-    assign next_r = w & m & x & r;
+    assign next_r = (w & m & x & r);
     assign next_x = w & m & x;
     assign next_m = w & m;
     assign next_w = w;
+    assign direct_r1 = direct_r1ctl( ir_r, ir_x, ir_m, ir_w );
+    assign direct_r2 = direct_r2ctl( ir_r, ir_x, ir_m, ir_w );
 
     function next_fctl;
         input  [31:0] ir_r, ir_x, ir_m, ir_w;
@@ -57,10 +60,34 @@ module hazard_detector ( ir_r, ir_x, ir_m, ir_w,
             next_fctl = 1'b1;
         end
     endfunction //
-    function next_rctl;
+
+    // 0 -> なし
+    // 1 -> Xから
+    // 2 -> Mから
+    // 3 -> Wから
+    function [1:0] direct_r1ctl;
         input  [31:0] ir_r, ir_x, ir_m, ir_w;
         begin
-                 if ( readreg1(ir_r)==changedreg(ir_x) ) next_rctl = 1'b0;
+            if      ( readreg1(ir_r)==directreg(ir_x) ) direct_r1ctl = 2'b01;
+            else if ( readreg1(ir_r)==directreg(ir_m) ) direct_r1ctl = 2'b10;
+            else if ( readreg1(ir_r)==directreg(ir_w) ) direct_r1ctl = 2'b11;
+            else                                        direct_r1ctl = 2'b00;
+        end
+    endfunction // if
+    function [1:0] direct_r2ctl;
+        input  [31:0] ir_r, ir_x, ir_m, ir_w;
+        begin
+            if      ( readreg2(ir_r)==directreg(ir_x) ) direct_r2ctl = 2'b01;
+            else if ( readreg2(ir_r)==directreg(ir_m) ) direct_r2ctl = 2'b10;
+            else if ( readreg2(ir_r)==directreg(ir_w) ) direct_r2ctl = 2'b11;
+            else                                        direct_r2ctl = 2'b00;
+        end
+    endfunction // if
+    
+    function [1:0] next_rctl;
+        input  [31:0] ir_r, ir_x, ir_m, ir_w;
+        begin
+            if      ( readreg1(ir_r)==changedreg(ir_x) ) next_rctl = 1'b0;
             else if ( readreg1(ir_r)==changedreg(ir_m) ) next_rctl = 1'b0;
             else if ( readreg1(ir_r)==changedreg(ir_w) ) next_rctl = 1'b0;
             else if ( readreg2(ir_r)==changedreg(ir_x) ) next_rctl = 1'b0;
@@ -112,7 +139,10 @@ module hazard_detector ( ir_r, ir_x, ir_m, ir_w,
               `zRET:   is_stack = 1'b1;
               `zPUSH:  is_stack = 1'b1;
               `zPOP:   is_stack = 1'b1;
-              default: is_stack = (changedreg( ir ) == {2'b0,`esp})?1'b1:1'b0;
+              default: is_stack = (
+                                   (changedreg( ir ) == {2'b0,`esp}) ||
+                                   (directreg( ir ) == {2'b0,`esp})     
+                                  ) ? 1'b1:1'b0;
             endcase // casex ( ir[31:16] )
         end
     endfunction // casex
@@ -176,22 +206,40 @@ module hazard_detector ( ir_r, ir_x, ir_m, ir_w,
         input  [31:0] ir;
         begin
             casex ( ir[31:16] )
-              `zST:   changedreg = 5'b01000;
-              `zBcc:  changedreg = 5'b01000;
-              `zJR:   changedreg = 5'b01000;
-              `zNOP:  changedreg = 5'b01000;
-              `zHLT:  changedreg = 5'b01000;
-              `zRET:  changedreg = 5'b01000;
-              `zJALR: changedreg = 5'b01000;
-              `zB:    changedreg = 5'b01000;
-              `zCMP:  changedreg = 5'b01000;
-              `zCMPI: changedreg = 5'b01000;
-              `zPUSH: changedreg = 5'b01000;
+              `zPOP:  changedreg = {2'b0,ir[18:16]};
               `zLD:   changedreg = {2'b0,ir[21:19]}; // rg1
-              default:changedreg = {2'b0,ir[18:16]}; // rg2
+              // default:changedreg = {2'b0,ir[18:16]}; // rg2
+              default:changedreg = 5'b01000;
             endcase // casex ( inst[31:16] )
         end
     endfunction // casex
+
+    function [4:0] directreg;
+        input  [31:0] ir;
+        begin
+            casex ( ir[31:16] )
+              `zADD:  directreg = {2'b0,ir[18:16]};
+              `zSUB:  directreg = {2'b0,ir[18:16]};
+              `zAND:  directreg = {2'b0,ir[18:16]};
+              `zOR:   directreg = {2'b0,ir[18:16]};
+              `zXOR:  directreg = {2'b0,ir[18:16]};
+              `zADDI: directreg = {2'b0,ir[18:16]};
+              `zSUBI: directreg = {2'b0,ir[18:16]};
+              `zADDI: directreg = {2'b0,ir[18:16]};
+              `zORI:  directreg = {2'b0,ir[18:16]};
+              `zXORI: directreg = {2'b0,ir[18:16]};
+              `zNEG:  directreg = {2'b0,ir[18:16]};
+              `zNOT:  directreg = {2'b0,ir[18:16]};
+              `zSLL:  directreg = {2'b0,ir[18:16]};
+              `zSRL:  directreg = {2'b0,ir[18:16]};
+              `zSRA:  directreg = {2'b0,ir[18:16]};
+              `zMOV:  directreg = {2'b0,ir[18:16]};
+              `zLIL:  directreg = {2'b0,ir[18:16]};
+              default:directreg = 5'b01000;
+            endcase // casex ( ir[31:16] )
+        end
+    endfunction // casex
+    
     
     // =======================================
     // ジャンプ命令チェック
